@@ -1,0 +1,649 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Tawuniya Fraudspect</title>
+<style>
+/* Layout: 56px app bar + 224px flat side nav + content; neutral surfaces, hairline borders, one accent. Charts: ECharts. Icons: Lucide. */
+:root{
+  --bg:#F5F6F8; --panel:#FFFFFF; --panel-2:#F3F4F6; --panel-3:#E9EBEF;
+  --line:#E3E5EA; --line-2:#CDD1D9;
+  --fg:#15181E; --fg-2:#4B5160; --fg-3:#7A8090; --fg-4:#A3A8B5;
+  --accent:#4F2D9F; --accent-hover:#3E2380; --accent-soft:#EEEAF8; --accent-fg:#FFFFFF;
+  --ok:#157A3C; --ok-soft:#E6F4EC; --warn:#A6600F; --warn-soft:#FBF1E3; --crit:#B42318; --crit-soft:#FCEBEA; --info:#1F5FBF;
+  --ch-1:#4F2D9F; --ch-2:#8C7BD1; --ch-3:#1F5FBF; --ch-4:#0F8F8A; --ch-5:#A6600F; --ch-6:#B42318; --ch-grid:#E3E5EA; --ch-text:#7A8090;
+  --shadow-drawer:-12px 0 40px rgba(16,18,24,.18);
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0F1115; --panel:#161920; --panel-2:#1C2028; --panel-3:#242934; --line:#262B35; --line-2:#363C49;
+  --fg:#E8EAEE; --fg-2:#B3B8C4; --fg-3:#858B99; --fg-4:#5F6675;
+  --accent:#A78BFA; --accent-hover:#C4B1FC; --accent-soft:#272042; --accent-fg:#14101F;
+  --ok:#4ADE80; --ok-soft:#14301F; --warn:#FBBF24; --warn-soft:#352810; --crit:#F87171; --crit-soft:#3A1A1A; --info:#60A5FA;
+  --ch-1:#A78BFA; --ch-2:#6D5BB8; --ch-3:#60A5FA; --ch-4:#2DD4BF; --ch-5:#FBBF24; --ch-6:#F87171; --ch-grid:#262B35; --ch-text:#858B99;
+  --shadow-drawer:-12px 0 40px rgba(0,0,0,.5); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1115; --panel:#161920; --panel-2:#1C2028; --panel-3:#242934; --line:#262B35; --line-2:#363C49;
+  --fg:#E8EAEE; --fg-2:#B3B8C4; --fg-3:#858B99; --fg-4:#5F6675;
+  --accent:#A78BFA; --accent-hover:#C4B1FC; --accent-soft:#272042; --accent-fg:#14101F;
+  --ok:#4ADE80; --ok-soft:#14301F; --warn:#FBBF24; --warn-soft:#352810; --crit:#F87171; --crit-soft:#3A1A1A; --info:#60A5FA;
+  --ch-1:#A78BFA; --ch-2:#6D5BB8; --ch-3:#60A5FA; --ch-4:#2DD4BF; --ch-5:#FBBF24; --ch-6:#F87171; --ch-grid:#262B35; --ch-text:#858B99;
+  --shadow-drawer:-12px 0 40px rgba(0,0,0,.5); color-scheme:dark;
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01","tnum"}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--panel)}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em} h1{font-size:18px} h2{font-size:14px} h3{font-size:12.5px}
+button{font-family:inherit;font-size:inherit} a{color:var(--accent)}
+.mono{font-family:var(--mono);font-size:12px} .num{font-variant-numeric:tabular-nums} .r{text-align:right}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-radius:3px}
+svg.lucide{width:16px;height:16px;stroke-width:1.75}
+
+/* app bar */
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;height:52px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand .mark{width:26px;height:26px;border-radius:5px;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;flex:none}
+.brand .mark svg{width:15px;height:15px}
+.brand b{font-weight:600;font-size:13.5px;letter-spacing:-.01em} .brand span{color:var(--fg-3);font-size:12px}
+.brand .sep{width:1px;height:16px;background:var(--line-2);margin:0 2px}
+.gsearch{flex:1;max-width:460px;display:flex;align-items:center;gap:8px;height:32px;border:1px solid var(--line);background:var(--bg);border-radius:4px;padding:0 10px;color:var(--fg-3)}
+.gsearch input{flex:1;min-width:0;border:0;background:transparent;color:var(--fg);font:inherit;outline:none}
+.gsearch kbd{font-family:var(--mono);font-size:10.5px;border:1px solid var(--line-2);border-radius:3px;padding:1px 5px;color:var(--fg-3)}
+.appbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.env{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--fg-2);border:1px solid var(--line);border-radius:4px;padding:5px 9px;background:var(--panel)}
+.env i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--panel-3);color:var(--fg-2);display:grid;place-items:center;font-size:11px;font-weight:600}
+.ibtn{width:32px;height:32px;border-radius:4px;border:1px solid var(--line);background:var(--panel);color:var(--fg-2);display:grid;place-items:center;cursor:pointer} .ibtn:hover{background:var(--panel-2);color:var(--fg)}
+.menu-btn{display:none}
+
+/* shell */
+.shell{display:grid;grid-template-columns:224px 1fr;min-height:calc(100% - 52px)}
+.sidenav{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:calc(52px + env(safe-area-inset-top,0px));height:calc(100vh - 52px - env(safe-area-inset-top,0px));display:flex;flex-direction:column;padding:12px 10px;z-index:40}
+.sn-label{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-4);font-weight:600;padding:12px 10px 6px}
+.sidenav a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:4px;color:var(--fg-2);text-decoration:none;cursor:pointer;font-weight:500;position:relative}
+.sidenav a:hover{background:var(--panel-2);color:var(--fg)} .sidenav a.active{background:var(--accent-soft);color:var(--accent)} .sidenav a.active svg{color:var(--accent)}
+.sidenav a svg{color:var(--fg-3)} .sidenav a .cnt{margin-left:auto;font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.sn-foot{margin-top:auto;padding:12px 10px calc(10px + env(safe-area-inset-bottom,0px));font-size:11px;color:var(--fg-3);line-height:1.5;border-top:1px solid var(--line)}
+.sn-foot b{color:var(--fg-2);font-weight:600}
+.content{min-width:0;padding:20px max(20px,env(safe-area-inset-right,0px)) calc(48px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));max-width:1360px;width:100%}
+
+/* page header */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.ph .crumbs{font-size:12px;color:var(--fg-3);margin-bottom:4px} .ph .crumbs b{color:var(--fg-2);font-weight:500}
+.ph p{margin:4px 0 0;color:var(--fg-2);max-width:78ch}
+.ph .actions{display:flex;gap:8px;flex-wrap:wrap}
+.infobar{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:10px 12px;margin-bottom:16px;color:var(--fg-2)}
+.infobar svg{color:var(--info);flex:none;margin-top:1px} .infobar b{color:var(--fg);font-weight:600}
+.infobar .dis{margin-left:auto;background:none;border:0;color:var(--fg-3);cursor:pointer;padding:0}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:4px;border:1px solid var(--line-2);background:var(--panel);color:var(--fg);font-weight:500;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel-2)} .btn:disabled{opacity:.55;cursor:default}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)} .btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--fg-2)} .btn.ghost:hover{background:var(--panel-2);color:var(--fg)}
+.btn.sm{height:28px;padding:0 9px;font-size:12px} .btn svg{width:15px;height:15px}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--panel);border-radius:4px;overflow:hidden;margin-bottom:16px}
+.kpi{padding:14px 16px;border-right:1px solid var(--line);min-width:0} .kpi:last-child{border-right:0}
+.kpi .l{font-size:11.5px;color:var(--fg-3);font-weight:500;display:flex;align-items:center;gap:6px}
+.kpi .v{font-size:24px;font-weight:600;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .s{font-size:11.5px;color:var(--fg-3);margin-top:5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.delta{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:11px;padding:1px 6px;border-radius:3px}
+.delta.crit{color:var(--crit);background:var(--crit-soft)} .delta.warn{color:var(--warn);background:var(--warn-soft)} .delta.ok{color:var(--ok);background:var(--ok-soft)}
+
+/* panels */
+.grid{display:grid;gap:16px} .panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;min-width:0}
+.pt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);min-height:40px}
+.pt h2{font-size:13px;font-weight:600} .pt .meta{font-size:11.5px;color:var(--fg-3)} .pt .acts{display:flex;gap:6px;align-items:center}
+.pb{padding:12px 14px} .pb.tight{padding:0}
+.chart{width:100%;height:220px} .chart.tall{height:260px} .chart.short{height:180px}
+.chart-fallback{height:100%;display:grid;place-items:center;color:var(--fg-3);font-size:12px}
+
+/* status & semantic */
+.st{display:inline-flex;align-items:center;gap:6px;font-weight:500;white-space:nowrap} .st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.st.HIGH,.st.crit{color:var(--crit)} .st.MEDIUM,.st.warn{color:var(--warn)} .st.LOW,.st.ok{color:var(--ok)} .st.muted{color:var(--fg-3)}
+.tag{display:inline-flex;align-items:center;font-family:var(--mono);font-size:11px;border:1px solid var(--line-2);border-radius:3px;padding:1px 6px;color:var(--fg-2);background:var(--panel);white-space:nowrap}
+.tag.HIGH{border-color:color-mix(in srgb,var(--crit) 45%,transparent);color:var(--crit);background:var(--crit-soft)} .tag.MEDIUM{border-color:color-mix(in srgb,var(--warn) 45%,transparent);color:var(--warn);background:var(--warn-soft)} .tag.LOW{border-color:color-mix(in srgb,var(--ok) 45%,transparent);color:var(--ok);background:var(--ok-soft)}
+.tag.flag{font-family:var(--font);font-weight:500;color:var(--accent);background:var(--accent-soft);border-color:transparent}
+.tagset{display:flex;flex-wrap:wrap;gap:4px}
+.score{display:inline-flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums} .score b{min-width:22px;text-align:right}
+.score .bar{width:56px;height:5px;background:var(--panel-3);border-radius:2px;overflow:hidden} .score .bar i{display:block;height:100%}
+.esc{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--crit)}
+
+/* toolbar + table */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
+.ctl{display:flex;flex-direction:column;gap:3px} .ctl label{font-size:10.5px;color:var(--fg-3);font-weight:500}
+.ctl input,.ctl select,textarea.code{height:30px;border:1px solid var(--line-2);background:var(--panel);color:var(--fg);border-radius:4px;padding:0 9px;font:inherit;font-size:12.5px} .ctl input{min-width:150px}
+.ctl.search{position:relative} .ctl.search svg{position:absolute;left:8px;bottom:7px;width:14px;height:14px;color:var(--fg-3)} .ctl.search input{padding-left:28px}
+textarea.code{height:auto;min-height:180px;width:100%;font-family:var(--mono);font-size:12px;line-height:1.5;padding:9px 10px;resize:vertical}
+.tw{overflow:x auto;overflow-x:auto} table{width:100%;border-collapse:collapse;min-width:760px}
+th{position:sticky;top:0;background:var(--panel-2);text-align:left;font-size:11px;font-weight:600;color:var(--fg-3);padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--fg)} th.r{text-align:right} th .ar{font-size:9px;margin-left:4px;color:var(--fg-4)} th.on{color:var(--fg)} th.on .ar{color:var(--accent)}
+td{padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap} td.r{text-align:right} tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer} tbody tr:hover{background:var(--panel-2)} tbody tr.sel{background:var(--accent-soft)}
+.rowid{font-family:var(--mono);font-size:12px;font-weight:500}
+.rowgo{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-weight:500;font-size:12px;white-space:nowrap} .rowgo svg{width:14px;height:14px}
+.hint{display:inline-flex;align-items:center;gap:6px;color:var(--fg-3);font-size:12px} .hint svg{width:14px;height:14px}
+.casehead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px} .casehead .id{font-family:var(--mono);font-size:14px;font-weight:600}
+.trace .step{grid-template-columns:22px 1fr auto}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:var(--fg-2);background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:2px 8px}
+.sub{color:var(--fg-3);font-size:11.5px}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-top:1px solid var(--line);font-size:12px;color:var(--fg-3);flex-wrap:wrap}
+.pager .pg{display:flex;gap:4px;align-items:center}
+.empty{padding:48px 16px;text-align:center;color:var(--fg-3)}
+
+/* key-value, lists */
+.kv{display:grid;grid-template-columns:140px 1fr;gap:7px 12px;font-size:12.5px} .kv dt{color:var(--fg-3)} .kv dd{margin:0;color:var(--fg)}
+.vlist{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.vlist li{border:1px solid var(--line);border-radius:4px;padding:9px 11px;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start}
+.vlist .vid{font-family:var(--mono);font-size:11px;color:var(--fg-3)} .vlist .vd{font-weight:500;grid-column:1/-1} .vlist .ve{color:var(--fg-3);font-size:12px;grid-column:1/-1}
+.bk{display:grid;grid-template-columns:118px 1fr 74px;gap:6px 10px;align-items:center;font-size:12.5px}
+.bk .t{height:6px;background:var(--panel-3);border-radius:2px;overflow:hidden} .bk .t i{display:block;height:100%}
+.bk .n{text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--fg-2)} .bk .n b{color:var(--fg)}
+.bk .note{grid-column:2/-1;font-size:11px;color:var(--fg-4);margin-top:-3px}
+.bigscore{display:flex;align-items:baseline;gap:10px} .bigscore b{font-size:36px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums} .bigscore span{color:var(--fg-3)}
+.callout{border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:4px;padding:10px 12px;background:var(--panel);color:var(--fg-2);line-height:1.5}
+.callout.info{border-left-color:var(--info)} .callout.ok{border-left-color:var(--ok)} .callout b{color:var(--fg);font-weight:600}
+.ready{display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:12.5px;align-items:center} .ready .y{color:var(--ok);font-weight:500} .ready .n{color:var(--crit);font-weight:500}
+.ai{white-space:pre-wrap;line-height:1.55;color:var(--fg)} .ai.muted{color:var(--fg-3)}
+.aihead{display:flex;align-items:center;gap:8px} .aihead svg{color:var(--accent)} .aihead .state{margin-left:auto;font-size:11px;color:var(--fg-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);padding:0 14px} .tabs button{border:0;background:transparent;color:var(--fg-3);font-weight:500;padding:9px 10px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px} .tabs button.on{color:var(--fg);border-bottom-color:var(--accent)}
+pre.code{margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.5;background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:10px;overflow:auto;max-height:280px;white-space:pre}
+
+/* pipeline stepper */
+.steps{display:flex;flex-direction:column} .step{display:grid;grid-template-columns:22px 1fr auto;gap:0 10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)} .step:last-child{border-bottom:0}
+.step .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-size:9.5px;color:var(--fg-3);background:var(--panel)}
+.step.run .dot{border-color:var(--accent);color:var(--accent)} .step.done .dot{background:var(--ok);border-color:var(--ok);color:#fff} .step.skip .dot{border-style:dashed}
+.step .nm{font-weight:500} .step .ds{font-size:11.5px;color:var(--fg-3)} .step .stt{font-size:11px;color:var(--fg-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600} .step.done .stt{color:var(--ok)} .step.run .stt{color:var(--accent)}
+.spin{width:12px;height:12px;border:2px solid var(--line-2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle} @keyframes spin{to{transform:rotate(360deg)}}
+.cases{display:grid;grid-template-columns:1fr 1fr;gap:6px} .case{border:1px solid var(--line);border-radius:4px;padding:8px 10px;cursor:pointer;background:var(--panel);text-align:left}
+.case:hover{border-color:var(--line-2);background:var(--panel-2)} .case.on{border-color:var(--accent);background:var(--accent-soft)} .case b{display:block;font-weight:500} .case span{font-size:11px;color:var(--fg-3)}
+
+/* drawer / inspector */
+.scrim{position:fixed;inset:0;background:rgba(10,12,16,.4);z-index:70;opacity:0;pointer-events:none;transition:opacity .15s} .scrim.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(640px,100%);background:var(--bg);z-index:80;box-shadow:var(--shadow-drawer);transform:translateX(100%);transition:transform .22s ease-out;display:flex;flex-direction:column;border-left:1px solid var(--line)}
+.drawer.show{transform:none}
+.dh{background:var(--panel);border-bottom:1px solid var(--line);padding:calc(12px + env(safe-area-inset-top,0px)) 16px 0}
+.dh .row{display:flex;align-items:center;gap:10px;padding-bottom:10px} .dh h2{flex:1;min-width:0;font-size:14px}
+.db{overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;flex:1}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:10px;flex:1;min-height:0}
+.msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:2px}
+.msg{max-width:86%;padding:9px 12px;border-radius:6px;line-height:1.5;white-space:pre-wrap;border:1px solid var(--line)} .msg.u{align-self:flex-end;background:var(--accent-soft);border-color:transparent} .msg.a{align-self:flex-start;background:var(--panel)}
+.askrow{display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--line);padding-top:10px}
+.askrow textarea{flex:1;min-width:0;border:1px solid var(--line-2);background:var(--panel);color:var(--fg);border-radius:4px;padding:8px 10px;font:inherit;resize:none;max-height:120px}
+.sugg{display:flex;flex-wrap:wrap;gap:6px} .sugg button{font-size:12px;border:1px solid var(--line-2);background:var(--panel);color:var(--fg-2);border-radius:999px;padding:4px 10px;cursor:pointer} .sugg button:hover{color:var(--fg);background:var(--panel-2)}
+
+.row{display:flex;gap:16px;flex-wrap:wrap} .muted{color:var(--fg-3)} .small{font-size:12px} .mt{margin-top:16px} .mb{margin-bottom:16px}
+@media (max-width:980px){ .shell{grid-template-columns:1fr} .sidenav{position:fixed;left:0;top:0;height:100%;width:260px;transform:translateX(-100%);transition:transform .2s;box-shadow:12px 0 40px rgba(0,0,0,.3);padding-top:calc(16px + env(safe-area-inset-top,0px))} .sidenav.show{transform:none} .menu-btn{display:grid} .gsearch{display:none} .kpis{grid-template-columns:1fr 1fr} .kpi:nth-child(2){border-right:0} .kpi:nth-child(-n+2){border-bottom:1px solid var(--line)} .two,.three{grid-template-columns:1fr!important} }
+@media (max-width:560px){ .cases{grid-template-columns:1fr} .kv{grid-template-columns:110px 1fr} .bk{grid-template-columns:96px 1fr 64px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+<header class="appbar">
+  <button class="ibtn menu-btn" id="menuBtn" aria-label="Menu"><i data-lucide="menu"></i></button>
+  <div class="brand"><div class="mark"><i data-lucide="shield-check"></i></div><b>Tawuniya</b><span class="sep"></span><span>Fraudspect</span></div>
+  <label class="gsearch"><i data-lucide="search"></i><input id="gq" placeholder="Search claim, provider or member id"><kbd>/</kbd></label>
+  <div class="appbar-right">
+    <span class="env"><i></i>Pipeline online &middot; Proposal #524</span>
+    <button class="btn primary" id="askBtn"><i data-lucide="sparkles"></i>Ask AI</button>
+    <button class="ibtn" id="themeBtn" aria-label="Toggle theme"><i data-lucide="sun" id="themeIco"></i></button>
+    <div class="avatar" title="fraud_admin">FA</div>
+  </div>
+</header>
+<div class="shell">
+  <nav class="sidenav" id="rail">
+    <div class="sn-label">Monitor</div>
+    <a data-route="overview"><i data-lucide="layout-dashboard"></i>Command Center</a>
+    <div class="sn-label">Datasets</div>
+    <a data-route="claims"><i data-lucide="receipt-text"></i>Claims<span class="cnt" id="nClaims"></span></a>
+    <a data-route="providers"><i data-lucide="building-2"></i>Providers<span class="cnt" id="nProv"></span></a>
+    <a data-route="members"><i data-lucide="users"></i>Members<span class="cnt" id="nMem"></span></a>
+    <div class="sn-label">Investigate</div>
+    <a data-route="cases"><i data-lucide="folder-open"></i>Case Queue<span class="cnt" id="nCases"></span></a>
+    <a data-route="analyze"><i data-lucide="scan-search"></i>Analyze a Claim</a>
+    <a data-route="assistant"><i data-lucide="bot"></i>AI Assistant</a>
+    <div class="sn-foot"><b>Fraudspect</b> 9-agent pipeline<br>LLM 40 &middot; Rules 35 &middot; Graph 25<br><span class="muted">Build 2026.11 &middot; anonymized data</span></div>
+  </nav>
+  <main class="content" id="view" tabindex="-1"></main>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" role="dialog">
+  <div class="dh"><div class="row"><h2 id="drawerTitle">Inspector</h2><button class="ibtn" id="drawerClose" aria-label="Close"><i data-lucide="x"></i></button></div><div class="tabs" id="dtabs" hidden></div></div>
+  <div class="db" id="drawerBody"></div>
+</aside>
+
+<script src="data/data.js"></script>
+<script>
+"use strict";
+/* Data is loaded from data/data.js (built from the CSVs by scripts/csv_to_dashboard.py; not in git). */
+var RAW = window.FRAUDSPECT_DATA || {claims:[],providers:[],members:[]};
+
+/* ======================= real taxonomy, rules, scoring (ported from backend) ======================= */
+var FLAG_META={UPCODING:"Upcoding",PHANTOM_BILLING:"Phantom billing",DUPLICATE_CLAIM:"Duplicate claim",UNNECESSARY_PROCEDURE:"Unnecessary procedure",ABNORMAL_PRESCRIBING:"Abnormal prescribing",CONTRAINDICATION:"Contraindication",DOCTOR_SHOPPING:"Doctor shopping",REFERRAL_LOOP:"Referral loop",CONTROLLED_DRUG_ABUSE:"Controlled drug abuse",BURST_BILLING:"Burst billing"};
+var RULE_META={"CHI-001":"Prohibited CPT combination","CHI-002":"Pediatric-only CPT for adult","CHI-003":"Duplicate billing (30 days)","CHI-004":"Controlled substance limit exceeded","CHI-005":"Insulin without A1C monitoring","CHI-006":"Excessive bronchodilator billing","CHI-007":"Methotrexate + NSAID without CBC","CHI-008":"Repeat colonoscopy within 12 months","CHI-009":"Antiviral beyond 5 days","CHI-010":"Doctor shopping","CSV-MEMBER-001":"Very high member utilization","CSV-MEMBER-002":"Elevated member utilization","CSV-CLAIM-001":"High-value claim","CSV-CLAIM-002":"Elevated claim amount","CSV-CLAIM-003":"High service count","CSV-CLAIM-004":"Non-standard claim status","CSV-PROVIDER-001":"Provider licence not active","CSV-PROVIDER-002":"Extreme provider claim volume","CSV-PROVIDER-003":"Elevated provider claim volume"};
+var SEV_SCORE={HIGH:100,MEDIUM:60,LOW:30}, WEIGHTS={llm:0.40,rule:0.35,graph:0.25};
+function V(id,sev,desc,ev){return {rule_id:id,severity:sev,description:desc,evidence:ev};}
+function fraudScore(llm,viols,graph){
+  var llmScore=+(llm&&llm.llm_risk_score)||0, ruleScore=viols.length?Math.max.apply(null,viols.map(function(v){return SEV_SCORE[v.severity]||30;})):0, graphScore=+(graph&&graph.graph_risk_score)||0;
+  var final_=Math.round(Math.min(100,llmScore*WEIGHTS.llm+ruleScore*WEIGHTS.rule+graphScore*WEIGHTS.graph)*100)/100;
+  var cat=final_>=70?"HIGH":final_>=40?"MEDIUM":"LOW"; if(viols.some(function(v){return v.severity==="HIGH";})&&cat==="LOW")cat="MEDIUM";
+  var flags=[];(llm&&llm.fraud_flags||[]).forEach(function(f){if(flags.indexOf(f)<0)flags.push(f);});viols.forEach(function(v){if(flags.indexOf(v.rule_id)<0)flags.push(v.rule_id);});
+  if(graph&&graph.referral_loop&&flags.indexOf("REFERRAL_LOOP")<0)flags.push("REFERRAL_LOOP"); if(graph&&graph.burst_detected&&flags.indexOf("BURST_BILLING")<0)flags.push("BURST_BILLING");
+  return {final_score:final_,risk_category:cat,fraud_flags:flags,escalate:cat==="HIGH",breakdown:{llm:llmScore,rule:ruleScore,graph:graphScore,llm_w:llmScore*WEIGHTS.llm,rule_w:ruleScore*WEIGHTS.rule,graph_w:graphScore*WEIGHTS.graph}};
+}
+function csvRules(kind,r){var v=[];
+  if(kind==="member"){if(r.visits>=100)v.push(V("CSV-MEMBER-001","HIGH","Very high patient healthcare utilization","Member profile reports "+r.visits+" healthcare visits"));else if(r.visits>=50)v.push(V("CSV-MEMBER-002","MEDIUM","Elevated patient healthcare utilization","Member profile reports "+r.visits+" healthcare visits"));}
+  else if(kind==="claim"){if(r.amt>=5000)v.push(V("CSV-CLAIM-001","HIGH","High-value claim summary","Claim net amount is "+r.amt.toFixed(2)));else if(r.amt>=2500)v.push(V("CSV-CLAIM-002","MEDIUM","Elevated claim amount","Claim net amount is "+r.amt.toFixed(2)));
+    if(r.sv>=10)v.push(V("CSV-CLAIM-003","MEDIUM","High number of services in one claim",r.sv+" services rendered in the claim")); if(r.status&&["N","A","APPROVED"].indexOf(r.status.toUpperCase())<0)v.push(V("CSV-CLAIM-004","LOW","Non-standard claim status","Claim status is "+r.status));}
+  else if(kind==="provider"){if(r.lic&&r.lic.toUpperCase()!=="A")v.push(V("CSV-PROVIDER-001","HIGH","Provider licensing status is not active","Licensing status is "+r.lic)); if(r.vol>=100000)v.push(V("CSV-PROVIDER-002","HIGH","Extreme provider claim volume","Provider profile reports "+r.vol+" claims"));else if(r.vol>=50000)v.push(V("CSV-PROVIDER-003","MEDIUM","Elevated provider claim volume","Provider profile reports "+r.vol+" claims"));}
+  return v;}
+var NO_LLM={extracted:{},checks:{},fraud_flags:[],llm_risk_score:0,overall_risk:"unknown",rationale:["LLM skipped for CSV bulk import"]};
+var NO_GRAPH={centrality_score:0,referral_loop:false,burst_detected:false,graph_risk_score:0,skipped_reason:"Graph analytics skipped for CSV bulk import"};
+var CLAIMS=[],PROVS=[],MEMS=[];
+(function(){RAW.claims.forEach(function(a){var r={id:a[0],type:a[1],status:a[2],amt:a[3],sv:a[4],date:a[5]};r.viol=csvRules("claim",r);r.sc=fraudScore(NO_LLM,r.viol,NO_GRAPH);CLAIMS.push(r);});
+  RAW.providers.forEach(function(a){var r={id:a[0],lic:a[1],city:a[2],region:a[3],type:a[4],vol:a[5]};r.viol=csvRules("provider",r);r.sc=fraudScore(NO_LLM,r.viol,NO_GRAPH);PROVS.push(r);});
+  RAW.members.forEach(function(a){var r={id:a[0],g:a[1],city:a[2],region:a[3],policy:a[4],age:a[5],visits:a[6],chronic:a[7],dm:a[8],htn:a[9],cad:a[10],dys:a[11],thy:a[12]};r.viol=csvRules("member",r);r.sc=fraudScore(NO_LLM,r.viol,NO_GRAPH);MEMS.push(r);});})();
+var LIC={A:"Active",H:"On hold",C:"Cancelled"}, STATUS={N:"Normal",J:"Rejected / non-standard"}, AGE_MID={"0-18":9,"19-30":24,"31-45":38,"46-60":53,"61+":65};
+
+/* ======================= helpers ======================= */
+var $=function(s,r){return (r||document).querySelector(s);};
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+function esc_(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function sar(n){return new Intl.NumberFormat("en-US",{maximumFractionDigits:0}).format(n);}
+function kfmt(n){return n>=1e6?(n/1e6).toFixed(2)+"M":n>=1e3?(n/1e3).toFixed(n>=1e5?0:1)+"k":String(n);}
+function icons(){try{if(window.lucide)lucide.createIcons();}catch(e){}}
+function ic(n,extra){return '<i data-lucide="'+n+'"'+(extra||"")+'></i>';}
+function cssv(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function st(cat,label){return '<span class="st '+cat+'">'+(label||cat.charAt(0)+cat.slice(1).toLowerCase())+'</span>';}
+function tag(t,cls){return '<span class="tag '+(cls||"")+'">'+esc_(t)+'</span>';}
+function flagTag(f){return FLAG_META[f]?tag(FLAG_META[f],"flag"):'<span class="tag" title="'+esc_(RULE_META[f]||"")+'">'+f+'</span>';}
+function scoreCell(sc){var col=sc.risk_category==="HIGH"?"--crit":sc.risk_category==="MEDIUM"?"--warn":"--ok";return '<span class="score"><b>'+sc.final_score.toFixed(0)+'</b><span class="bar"><i style="width:'+sc.final_score+'%;background:var('+col+')"></i></span>'+st(sc.risk_category)+'</span>';}
+function hitsCell(v){return v.length?'<div class="tagset">'+v.map(function(x){return tag(x.rule_id,x.severity);}).join("")+'</div>':'<span class="muted">—</span>';}
+function violList(viols){if(!viols.length)return '<div class="callout ok">No rule violation. Amount, services, status, licence and utilization are within the configured thresholds.</div>';
+  return '<ul class="vlist">'+viols.map(function(v){return '<li><span class="vid">'+v.rule_id+'</span>'+st(v.severity)+'<span class="vd">'+esc_(v.description)+'</span><span class="ve">'+esc_(v.evidence)+'</span></li>';}).join("")+'</ul>';}
+function breakdown(sc,skipped){var b=sc.breakdown;function row(l,w,max,col,note){return '<span>'+l+'</span><span class="t"><i style="width:'+(w/max*100)+'%;background:var('+col+')"></i></span><span class="n"><b>'+w.toFixed(1)+'</b> / '+max+'</span>'+(note?'<span class="note">'+note+'</span>':'');}
+  var fc=sc.risk_category==="HIGH"?"--crit":sc.risk_category==="MEDIUM"?"--warn":"--ok";
+  return '<div class="bk">'+row("LLM × 0.40",b.llm_w,40,"--ch-1",skipped?"stage skipped on bulk import":"")+row("Rules × 0.35",b.rule_w,35,"--ch-5","")+row("Graph × 0.25",b.graph_w,25,"--ch-3",skipped?"stage skipped on bulk import":"")+'<span style="font-weight:600;border-top:1px solid var(--line);padding-top:6px">Final</span><span class="t" style="border-top:1px solid transparent;margin-top:6px"><i style="width:'+sc.final_score+'%;background:var('+fc+')"></i></span><span class="n" style="padding-top:6px"><b>'+sc.final_score.toFixed(1)+'</b> / 100</span></div>';}
+function panel(title,meta,body,acts,cls){return '<section class="panel '+(cls||"")+'"><div class="pt"><div><h2>'+title+'</h2></div><div class="acts">'+(meta?'<span class="meta">'+meta+'</span>':'')+(acts||'')+'</div></div>'+body+'</section>';}
+
+/* ======================= charts (ECharts) ======================= */
+var CHARTS=[];
+function disposeCharts(){CHARTS.forEach(function(c){try{c.dispose();}catch(e){}});CHARTS=[];}
+function theme(){return {text:cssv("--ch-text"),grid:cssv("--ch-grid"),fg:cssv("--fg"),c:[cssv("--ch-1"),cssv("--ch-2"),cssv("--ch-3"),cssv("--ch-4"),cssv("--ch-5"),cssv("--ch-6")],crit:cssv("--crit"),warn:cssv("--warn"),ok:cssv("--ok"),panel:cssv("--panel"),line:cssv("--line-2")};}
+function mkChart(id,opt){var e=document.getElementById(id);if(!e)return null;if(!window.echarts){e.innerHTML='<div class="chart-fallback">Chart library unavailable</div>';return null;}
+  var t=theme();var ch=echarts.init(e,null,{renderer:"svg"});
+  var base={textStyle:{fontFamily:cssv("--font").replace(/"/g,""),color:t.text,fontSize:11},color:t.c,animationDuration:400,
+    tooltip:{backgroundColor:t.panel,borderColor:t.line,textStyle:{color:t.fg,fontSize:12},confine:true,extraCssText:"box-shadow:0 4px 16px rgba(0,0,0,.12);border-radius:4px;padding:8px 10px"},
+    grid:{left:8,right:12,top:10,bottom:4,containLabel:true}};
+  ch.setOption(Object.assign(base,opt),{notMerge:true});CHARTS.push(ch);return ch;}
+function axisX(cats,extra){return Object.assign({type:"category",data:cats,axisTick:{show:false},axisLine:{lineStyle:{color:cssv("--ch-grid")}},axisLabel:{color:cssv("--ch-text"),fontSize:11,hideOverlap:true}},extra||{});}
+function axisV(extra){return Object.assign({type:"value",splitLine:{lineStyle:{color:cssv("--ch-grid"),type:[2,3]}},axisLabel:{color:cssv("--ch-text"),fontSize:11}},extra||{});}
+function hbar(id,items,colorFn){var t=theme();var cats=items.map(function(i){return i[0];}).reverse(),vals=items.map(function(i,ix){return {value:i[1],itemStyle:{color:colorFn?colorFn(i,ix):t.c[0]}};}).reverse();
+  mkChart(id,{grid:{left:8,right:36,top:4,bottom:4,containLabel:true},xAxis:axisV({splitLine:{show:false},axisLabel:{show:false}}),yAxis:axisX(cats,{axisLine:{show:false}}),tooltip:{trigger:"item"},
+    series:[{type:"bar",data:vals,barMaxWidth:14,label:{show:true,position:"right",color:t.text,fontSize:11,formatter:function(p){return sar(p.value);}}}]});}
+function vbar(id,cats,series,opts){var t=theme();opts=opts||{};
+  mkChart(id,{xAxis:axisX(cats,opts.xAxis),yAxis:axisV(),tooltip:{trigger:"axis",axisPointer:{type:"shadow"}},legend:series.length>1?{top:0,right:0,textStyle:{color:t.text,fontSize:11},itemWidth:10,itemHeight:10,icon:"roundRect"}:undefined,
+    grid:{left:8,right:12,top:series.length>1?28:10,bottom:4,containLabel:true},series:series.map(function(s,i){return Object.assign({type:"bar",barMaxWidth:28,stack:opts.stack?"a":undefined,itemStyle:{color:s.color||t.c[i],borderRadius:[2,2,0,0]}},s);})});}
+function donut(id,items){var t=theme();mkChart(id,{tooltip:{trigger:"item",formatter:function(p){return p.name+": <b>"+sar(p.value)+"</b> ("+p.percent+"%)";}},legend:{orient:"vertical",right:0,top:"middle",textStyle:{color:t.text,fontSize:11.5},itemWidth:10,itemHeight:10,icon:"circle",formatter:function(n){var it=items.find(function(i){return i.name===n;});return n+"  "+sar(it.value);}},
+  series:[{type:"pie",radius:["58%","82%"],center:["32%","50%"],data:items,label:{show:false},itemStyle:{borderColor:t.panel,borderWidth:2}}]});}
+function line(id,xs,ys,peakIdx){var t=theme();mkChart(id,{xAxis:axisX(xs,{boundaryGap:false,axisLabel:{formatter:function(v){return v.slice(5);},interval:4}}),yAxis:axisV(),tooltip:{trigger:"axis"},
+  series:[{type:"line",data:ys,smooth:.25,symbol:"circle",symbolSize:4,showSymbol:false,lineStyle:{width:2,color:t.c[0]},itemStyle:{color:t.c[0]},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:t.c[0]+"33"},{offset:1,color:t.c[0]+"00"}]}},
+    markPoint:{data:[{coord:[xs[peakIdx],ys[peakIdx]],symbol:"circle",symbolSize:8,itemStyle:{color:t.c[0],borderColor:t.panel,borderWidth:2},label:{show:true,formatter:"peak "+ys[peakIdx],position:"top",color:t.fg,fontSize:11}}]}}]});}
+function hist(id,vals,edges,hotFrom){var t=theme();var bins=edges.map(function(){return 0;});vals.forEach(function(v){for(var i=edges.length-1;i>=0;i--){if(v>=edges[i]){bins[i]++;break;}}});
+  var cats=edges.map(function(e,i){return i<edges.length-1?e+"–"+(edges[i+1]-1):e+"+";});
+  mkChart(id,{xAxis:axisX(cats,{axisLabel:{interval:0,rotate:cats.length>10?35:0}}),yAxis:axisV(),tooltip:{trigger:"axis",axisPointer:{type:"shadow"}},series:[{type:"bar",barMaxWidth:26,data:bins.map(function(b,i){return {value:b,itemStyle:{color:edges[i]>=hotFrom?t.crit:t.c[0],borderRadius:[2,2,0,0]}};})}]});}
+window.addEventListener("resize",function(){CHARTS.forEach(function(c){try{c.resize();}catch(e){}});});
+
+/* ======================= AI (sample capability) ======================= */
+var _sample,_tried=false;
+/* AI runtime: the claude.ai artifact runtime when present; otherwise the deployment's own /api/ai endpoint (Vercel serverless → Groq, same model as the backend). */
+function makeRemoteSample(){
+  var fn=async function(input,opts){opts=opts||{};var messages=typeof input==="string"?[{role:"user",content:input}]:input.slice();var tools=opts.tools||[];
+    var toolDefs=tools.map(function(t){return {type:"function",function:{name:t.name,description:t.description,parameters:t.inputSchema||{type:"object",properties:{}}}};});
+    for(var round=0;round<6;round++){
+      var r=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:messages,tools:toolDefs})});
+      if(!r.ok){var err={};try{err=await r.json();}catch(e){}throw {code:r.status===429?"rate_limited":r.status===503?"not_granted":"error",message:err.error||r.statusText};}
+      var j=await r.json(),m=j.message||{};messages.push(m);
+      if(m.tool_calls&&m.tool_calls.length){
+        for(var i=0;i<m.tool_calls.length;i++){var tc=m.tool_calls[i],t=tools.find(function(x){return x.name===tc.function.name;}),out;
+          try{out=t?await t.execute(JSON.parse(tc.function.arguments||"{}")):{error:"unknown tool"};}catch(e){out={error:String(e&&e.message||e)};}
+          messages.push({role:"tool",tool_call_id:tc.id,content:JSON.stringify(out)});}
+        continue;}
+      var text=m.content||"";if(opts.onText)opts.onText({text:text,delta:text});return {text:text,truncated:false};}
+    throw {code:"error",message:"tool loop exceeded"};};
+  fn.limits=async function(){return {images:false};};return fn;}
+async function getSample(){if(_tried)return _sample;_tried=true;
+  try{_sample=(window.claude&&claude.use)?await claude.use("sample"):null;}catch(e){_sample=null;}
+  if(!_sample){try{var r=await fetch("/api/ai",{method:"GET"});if(r.ok){var j=await r.json();if(j&&j.ok){_sample=makeRemoteSample();var hp=document.querySelector(".env");if(hp&&j.model)hp.innerHTML="<i></i>AI online · "+esc_(j.model);}}}catch(e){}}
+  return _sample;}
+var REASONER_PROMPT='You are a medical fraud detection AI specializing in healthcare claim analysis.\nAnalyze the provided healthcare claim and return a structured JSON assessment.\n\nEvaluate:\n1. Diagnosis-treatment consistency\n2. Medication dose plausibility\n3. Contraindications between medications\n4. Care pathway validity\n5. Fraud indicators (upcoding, phantom billing, unnecessary procedures)\n\nReturn ONLY valid JSON with this exact schema:\n{\n  "extracted": {"key_findings": []},\n  "checks": {\n    "diagnosis_treatment_match": true,\n    "dose_plausible": true,\n    "contraindications": [],\n    "care_pathway_valid": true\n  },\n  "fraud_flags": [],\n  "llm_risk_score": 0,\n  "overall_risk": "low",\n  "rationale": []\n}\n\nfraud_flags options: UPCODING, PHANTOM_BILLING, DUPLICATE_CLAIM, UNNECESSARY_PROCEDURE,\nABNORMAL_PRESCRIBING, CONTRAINDICATION, DOCTOR_SHOPPING, REFERRAL_LOOP, CONTROLLED_DRUG_ABUSE\n\noverall_risk: low, medium, or high\nllm_risk_score: integer 0-100';
+function parseReasoner(text){try{var m=text.match(/\{[\s\S]*\}/);if(m){var d=JSON.parse(m[0]);return {extracted:d.extracted||{},checks:d.checks||{},fraud_flags:d.fraud_flags||[],llm_risk_score:+d.llm_risk_score||0,overall_risk:d.overall_risk||"unknown",rationale:d.rationale||[]};}}catch(e){}return null;}
+async function runReasoner(payload,onText){var sm=await getSample();if(!sm)return {ok:false,reason:"unavailable"};
+  try{var r=await sm(REASONER_PROMPT+"\n\nAnalyze this healthcare claim:\n"+JSON.stringify(payload,null,2),{modelTier:"default",cache:true,onText:onText});var p=parseReasoner(r.text||"");return p?{ok:true,result:p}:{ok:false,reason:"unparseable"};}catch(e){return {ok:false,reason:e&&e.code||"error"};}}
+
+/* ======================= router ======================= */
+var ROUTES={overview:"Command Center",claims:"Claims",providers:"Providers",members:"Members",cases:"Case Queue",analyze:"Analyze a Claim",assistant:"AI Assistant"};
+function go(r){location.hash=ROUTES[r]?r:"overview";}
+function current(){var h=(location.hash||"").replace(/^#/,"");return ROUTES[h]?h:"overview";}
+function render(){disposeCharts();var r=current();document.querySelectorAll("#rail a").forEach(function(a){a.classList.toggle("active",a.dataset.route===r);});
+  var v=$("#view");v.innerHTML="";({overview:viewOverview,claims:viewClaims,providers:viewProviders,members:viewMembers,cases:viewCases,analyze:viewAnalyze,assistant:viewAssistant}[r])(v);icons();v.focus({preventScroll:true});window.scrollTo(0,0);closeRail();}
+window.addEventListener("hashchange",render);
+function pageHead(title,desc,actions){return '<div class="ph"><div><div class="crumbs">Fraudspect / <b>'+title+'</b></div><h1>'+title+'</h1>'+(desc?'<p>'+desc+'</p>':'')+'</div>'+(actions?'<div class="actions">'+actions+'</div>':'')+'</div>';}
+
+/* ======================= stats ======================= */
+function cnt(arr,f){var m={};arr.forEach(function(x){var k=f(x);m[k]=(m[k]||0)+1;});return m;}
+function stats(){var s={};
+  s.claims={n:CLAIMS.length,value:CLAIMS.reduce(function(a,c){return a+c.amt;},0),inpatient:CLAIMS.filter(function(c){return c.type==="I";}).length,rejected:CLAIMS.filter(function(c){return c.status!=="N";}).length,high:CLAIMS.filter(function(c){return c.viol.some(function(v){return v.severity==="HIGH";});}).length,flagged:CLAIMS.filter(function(c){return c.viol.length;}).length,flaggedValue:CLAIMS.filter(function(c){return c.viol.length;}).reduce(function(a,c){return a+c.amt;},0)};
+  s.prov={n:PROVS.length,nonActive:PROVS.filter(function(p){return p.lic!=="A";}).length,extreme:PROVS.filter(function(p){return p.vol>=100000;}).length,elevated:PROVS.filter(function(p){return p.vol>=50000&&p.vol<100000;}).length,flagged:PROVS.filter(function(p){return p.viol.length;}).length,byRegion:cnt(PROVS,function(p){return p.region;}),byType:cnt(PROVS,function(p){return p.type;})};
+  s.mem={n:MEMS.length,veryHigh:MEMS.filter(function(m){return m.visits>=100;}).length,elevated:MEMS.filter(function(m){return m.visits>=50&&m.visits<100;}).length,chronic:MEMS.filter(function(m){return m.chronic;}).length,flagged:MEMS.filter(function(m){return m.viol.length;}).length,byRegion:cnt(MEMS,function(m){return m.region;}),byAge:cnt(MEMS,function(m){return m.age;}),byPolicy:cnt(MEMS,function(m){return m.policy;}),
+    cond:{Diabetes:MEMS.filter(function(m){return m.dm;}).length,Hypertension:MEMS.filter(function(m){return m.htn;}).length,Dyslipidemia:MEMS.filter(function(m){return m.dys;}).length,"Thyroid disease":MEMS.filter(function(m){return m.thy;}).length,CAD:MEMS.filter(function(m){return m.cad;}).length}};
+  s.ruleHits={};[CLAIMS,PROVS,MEMS].forEach(function(arr){arr.forEach(function(r){r.viol.forEach(function(v){s.ruleHits[v.rule_id]=(s.ruleHits[v.rule_id]||0)+1;});});});return s;}
+
+/* ======================= VIEW: overview ======================= */
+function kpi(l,v,sub,icon){return '<div class="kpi"><div class="l">'+ic(icon)+l+'</div><div class="v">'+v+'</div><div class="s">'+sub+'</div></div>';}
+function viewOverview(v){var s=stats();var w=el("div");
+  w.innerHTML=pageHead("Command Center","Risk posture across the three Proposal #524 extracts, scored with the production rule engine on the bulk-import path.",'<button class="btn" id="brBtn">'+ic("sparkles")+'AI briefing</button>')+
+    (sessionStorage.getItem("fs-info")?"":'<div class="infobar">'+ic("info")+'<div><b>How Fraudspect scores a claim.</b> Nine agents run in sequence: ingest, OCR, code normalization, an LLM clinical reasoner, a CHI rule engine, provider-network graph analytics, a weighted scorer (LLM 40%, rules 35%, graph 25%), a case manager that builds the evidence pack, and an audit log. 70+ is HIGH and escalates; 40–69 is MEDIUM.</div><button class="dis" id="disInfo" aria-label="Dismiss">'+ic("x")+'</button></div>')+
+    '<div class="kpis">'+kpi("Claims in extract",s.claims.n,'<span>SAR '+kfmt(s.claims.value)+' net</span><span class="muted">·</span><span>'+s.claims.inpatient+' inpatient</span>',"receipt-text")+
+    kpi("Claims with rule hits",s.claims.flagged,'<span class="delta crit">'+s.claims.high+' high</span><span>SAR '+kfmt(s.claims.flaggedValue)+' held</span>',"alert-triangle")+
+    kpi("Providers flagged",s.prov.flagged,'<span class="delta crit">'+s.prov.nonActive+' licence not active</span><span>'+s.prov.extreme+' extreme volume</span>',"building-2")+
+    kpi("Members flagged",s.mem.flagged,'<span class="delta crit">'+s.mem.veryHigh+' with 100+ visits</span><span>'+s.mem.chronic+' chronic</span>',"users")+'</div>'+
+    '<div class="grid two mb" style="grid-template-columns:1fr 1fr"><div class="callout"><b>Nothing in this extract can escalate as-is.</b> The bulk CSV path skips the LLM and graph stages by default, so only the rule component (max 35 of 100) is scored. A high-severity hit lands at exactly 35.0 and is lifted to MEDIUM, never HIGH. Enabling <span class="mono">run_llm</span> for the '+(s.claims.high+s.prov.nonActive+s.prov.extreme+s.mem.veryHigh)+' high-severity rows is cheap and is the largest single improvement. Open any flagged row and use <b>Run AI review</b> to see the effect.</div>'+
+    '<div class="callout info"><b>The three files cannot be joined.</b> Claims carry no provider or member identifier, so duplicate billing (CHI-003), doctor shopping (CHI-010), burst billing and referral loops have nothing to link. Adding <span class="mono">anon_provider_id</span> and <span class="mono">anon_id_no</span> to the claims extract unlocks five more detectors with no model changes.</div></div>'+
+    '<div class="grid two mb" style="grid-template-columns:1.25fr 1fr">'+panel("Rule hits across datasets","by rule id",'<div class="pb"><div id="chRules" class="chart tall"></div></div>')+panel("Provider rule hits by region","hit vs clean",'<div class="pb"><div id="chRegion" class="chart tall"></div></div>')+'</div>'+
+    '<div class="grid two mb" style="grid-template-columns:1.25fr 1fr">'+panel("Claims per day","17 Dec 2024 – 20 Jan 2025",'<div class="pb"><div id="chDaily" class="chart"></div></div>')+
+      panel("AI daily briefing","ClinicalReasoner model",'<div class="pb"><div class="aihead mb" style="margin-bottom:8px">'+ic("sparkles")+'<span class="small muted">Plain-language summary for investigators</span><span class="state" id="brTag">ready</span></div><div class="ai muted" id="brText">Click “AI briefing” to summarize today’s posture across claims, providers and members.</div></div>')+'</div>'+
+    panel("Detector readiness on this dataset","what the current extract can and cannot power",'<div class="pb"><div class="ready">'+[["CSV threshold rules (amount, services, status, licence, volume, utilization)","ok"],["LLM clinical reasoning (upcoding, phantom billing, necessity)","needs run_llm=true"],["Duplicate billing CHI-003","needs provider + member id on claims"],["Doctor shopping CHI-010","needs member id on claims"],["Burst billing & referral loops (graph)","needs provider id on claims"],["Disease-specific rules CHI-005 to CHI-009","needs diagnosis / procedure / medication codes"]].map(function(d){return '<span>'+d[0]+'</span><span class="'+(d[1]==="ok"?"y":"n")+'">'+(d[1]==="ok"?"Active":d[1])+'</span>';}).join("")+'</div></div>');
+  v.appendChild(w);
+  var ruleItems=Object.keys(s.ruleHits).sort(function(a,b){return s.ruleHits[b]-s.ruleHits[a];}).map(function(id){return [id+"  "+RULE_META[id],s.ruleHits[id],id];});
+  var t=theme();hbar("chRules",ruleItems,function(it){return /001$/.test(it[2])?t.crit:/00[23]$/.test(it[2])?t.warn:t.ok;});
+  var regs=["Center","West","East","South","North"];vbar("chRegion",regs,[{name:"Rule hit",data:regs.map(function(r){return PROVS.filter(function(p){return p.region===r&&p.viol.length;}).length;}),color:t.warn},{name:"Clean",data:regs.map(function(r){return PROVS.filter(function(p){return p.region===r&&!p.viol.length;}).length;}),color:t.c[1]}],{stack:true});
+  var days={};CLAIMS.forEach(function(c){days[c.date]=(days[c.date]||0)+1;});var keys=Object.keys(days).sort();var ys=keys.map(function(k){return days[k];});line("chDaily",keys,ys,ys.indexOf(Math.max.apply(null,ys)));
+  $("#brBtn").addEventListener("click",briefing);var d=$("#disInfo");if(d)d.addEventListener("click",function(){try{sessionStorage.setItem("fs-info","1");}catch(e){}d.parentElement.remove();});
+}
+async function briefing(){var s=stats(),txt=$("#brText"),tagE=$("#brTag"),btn=$("#brBtn");if(!txt)return;
+  var fb="Extract covers "+s.claims.n+" claims worth SAR "+sar(s.claims.value)+", "+s.prov.n+" providers and "+s.mem.n+" members. "+s.claims.flagged+" claims hit a rule ("+s.claims.high+" over SAR 5,000), "+s.prov.nonActive+" providers bill on a non-active licence, "+s.prov.extreme+" show extreme volume, and "+s.mem.veryHigh+" members exceed 100 visits. Priority: enable the LLM stage for high-severity rows and add provider/member keys to the claims extract.";
+  txt.classList.remove("muted");tagE.textContent="thinking…";var sm=await getSample();if(!sm){txt.textContent=fb;tagE.textContent="offline summary";return;}btn.disabled=true;txt.textContent="";
+  var topP=PROVS.filter(function(p){return p.viol.length;}).sort(function(a,b){return b.vol-a.vol;}).slice(0,3).map(function(p){return p.type+" #"+p.id+" in "+p.city+" ("+LIC[p.lic]+", "+sar(p.vol)+" claims)";});
+  var prompt="You are a healthcare fraud analyst at Tawuniya (Saudi Arabia). Write a concise 4-sentence daily briefing for investigators in plain English. No preamble.\nData (anonymized extract):\n- Claims: "+s.claims.n+", net SAR "+sar(s.claims.value)+", "+s.claims.inpatient+" inpatient, "+s.claims.rejected+" non-standard status\n- Claims with rule hits: "+s.claims.flagged+" ("+s.claims.high+" high-value >= SAR 5000)\n- Providers: "+s.prov.n+"; non-active licence: "+s.prov.nonActive+"; extreme volume >=100k: "+s.prov.extreme+"; elevated: "+s.prov.elevated+"\n- Top flagged providers: "+topP.join("; ")+"\n- Members: "+s.mem.n+"; 100+ visits: "+s.mem.veryHigh+"; 50-99 visits: "+s.mem.elevated+"; chronic: "+s.mem.chronic+"\n- Caveat: bulk import skips LLM and graph stages so no row can reach HIGH; claims have no provider/member keys.";
+  try{var r=await sm(prompt,{modelTier:"quick",cache:true,onText:function(o){txt.textContent=o.text;}});if(r&&r.text)txt.textContent=r.text;tagE.textContent="AI generated";}catch(e){txt.textContent=fb;tagE.textContent=e&&e.code==="rate_limited"?"rate limited":"offline summary";}btn.disabled=false;}
+
+/* ======================= sortable, paged table ======================= */
+function tableView(o){var S=o.state;S.page=S.page||1;S.sort=S.sort||o.defaultSort;S.dir=S.dir||-1;var PS=25;
+  var cols=o.cols,col=cols.find(function(c){return c.k===S.sort;});var rows=o.rows.slice();if(col&&col.v)rows.sort(function(a,b){var x=col.v(a),y=col.v(b);return (x>y?1:x<y?-1:0)*S.dir;});
+  var total=rows.length,pages=Math.max(1,Math.ceil(total/PS));if(S.page>pages)S.page=pages;var slice=rows.slice((S.page-1)*PS,S.page*PS);
+  var h=total?'<div class="tw"><table><thead><tr>'+cols.map(function(c){return '<th class="'+(c.r?"r ":"")+(S.sort===c.k?"on":"")+'" data-k="'+c.k+'">'+c.h+(c.v?'<span class="ar">'+(S.sort===c.k?(S.dir>0?"▲":"▼"):"⇅")+'</span>':'')+'</th>';}).join("")+'<th class="r"></th></tr></thead><tbody>'+
+    slice.map(function(r){return '<tr data-id="'+esc_(r.id)+'" class="'+(o.selected===r.id?"sel":"")+'">'+cols.map(function(c){return '<td class="'+(c.r?"r":"")+'">'+c.f(r)+'</td>';}).join("")+'<td class="r"><span class="rowgo">'+(o.rowLabel||"View")+ic("chevron-right")+'</span></td></tr>';}).join("")+'</tbody></table></div>'+
+    '<div class="pager"><span>'+((S.page-1)*PS+1)+'–'+Math.min(total,S.page*PS)+' of '+sar(total)+'</span><span class="pg"><button class="btn sm ghost" data-pg="-1" '+(S.page<=1?"disabled":"")+'>'+ic("chevron-left")+'</button><span>Page '+S.page+' of '+pages+'</span><button class="btn sm ghost" data-pg="1" '+(S.page>=pages?"disabled":"")+'>'+ic("chevron-right")+'</button></span></div>'
+    :'<div class="empty">No rows match the current filters.</div>';
+  o.host.innerHTML=h;icons();
+  o.host.querySelectorAll("tbody tr").forEach(function(tr){tr.addEventListener("click",function(){o.host.querySelectorAll("tr.sel").forEach(function(x){x.classList.remove("sel");});tr.classList.add("sel");o.onRow(tr.dataset.id);});});
+  o.host.querySelectorAll("[data-pg]").forEach(function(b){b.addEventListener("click",function(){S.page+=+b.dataset.pg;tableView(o);});});
+  o.host.querySelectorAll("th[data-k]").forEach(function(th){th.addEventListener("click",function(){var c=cols.find(function(x){return x.k===th.dataset.k;});if(!c||!c.v)return;if(S.sort===c.k)S.dir=-S.dir;else{S.sort=c.k;S.dir=-1;}S.page=1;tableView(o);});});}
+function sevRank(r){return r.viol.reduce(function(a,v){return Math.max(a,SEV_SCORE[v.severity]);},0);}
+
+/* ======================= VIEW: claims ======================= */
+var fC={q:"",type:"",status:"",band:"",page:1};
+function matchBand(r,b){if(!b)return true;if(b==="HIGH")return r.viol.some(function(x){return x.severity==="HIGH";});if(b==="MEDIUM")return r.viol.some(function(x){return x.severity==="MEDIUM";});if(b==="any")return r.viol.length>0;return r.viol.length===0;}
+function bandSel(id,val){return '<div class="ctl"><label>Rule severity</label><select id="'+id+'"><option value="">Any</option><option value="HIGH">High hit</option><option value="MEDIUM">Medium hit</option><option value="any">Any hit</option><option value="none">No hit</option></select></div>';}
+function viewClaims(v){var s=stats();var w=el("div");
+  w.innerHTML=pageHead("Claims",CLAIMS.length+" claim summaries from file 2 (id, type, status, net amount, services, date), scored with CSV-CLAIM-001 to 004 exactly as the importer runs them. Outpatient maps to CPT 99213, inpatient to 99223. Click any row to open its details.")+
+    '<div class="grid three mb" style="grid-template-columns:1fr 1fr 1fr">'+panel("Amount bands","rule thresholds",'<div class="pb"><div id="chAmt" class="chart short"></div></div>')+panel("Services per claim","10+ triggers CSV-CLAIM-003",'<div class="pb"><div id="chSv" class="chart short"></div></div>')+panel("Type and status","",'<div class="pb"><div id="chTs" class="chart short"></div></div>')+'</div>'+
+    '<section class="panel"><div class="toolbar"><div class="ctl search"><label>Search</label>'+ic("search")+'<input id="fq" placeholder="claim id" value="'+esc_(fC.q)+'"></div><div class="ctl"><label>Type</label><select id="ftype"><option value="">Any</option><option value="O">Outpatient</option><option value="I">Inpatient</option></select></div><div class="ctl"><label>Status</label><select id="fstatus"><option value="">Any</option><option value="N">N normal</option><option value="J">J non-standard</option></select></div>'+bandSel("fband")+'<button class="btn ghost sm" id="fclear" style="align-self:flex-end">Clear</button><span class="muted small" style="margin-left:auto;align-self:flex-end" id="fcount"></span></div><div id="host"></div></section>';
+  v.appendChild(w);var t=theme();
+  vbar("chAmt",["≥ 5,000","2,500–4,999","< 2,500"],[{data:[{value:CLAIMS.filter(function(c){return c.amt>=5000;}).length,itemStyle:{color:t.crit}},{value:CLAIMS.filter(function(c){return c.amt>=2500&&c.amt<5000;}).length,itemStyle:{color:t.warn}},{value:CLAIMS.filter(function(c){return c.amt<2500;}).length,itemStyle:{color:t.c[0]}}]}]);
+  hist("chSv",CLAIMS.map(function(c){return c.sv;}),[1,2,3,4,5,6,7,8,9,10,15,20,30,50],10);
+  vbar("chTs",["Outpatient","Inpatient","Status N","Status J"],[{data:[{value:CLAIMS.filter(function(c){return c.type==="O";}).length},{value:CLAIMS.filter(function(c){return c.type==="I";}).length},{value:CLAIMS.filter(function(c){return c.status==="N";}).length},{value:CLAIMS.filter(function(c){return c.status==="J";}).length,itemStyle:{color:t.warn}}]}]);
+  $("#ftype").value=fC.type;$("#fstatus").value=fC.status;$("#fband").value=fC.band;var host=$("#host");
+  function draw(){var rows=CLAIMS.filter(function(c){return (!fC.q||c.id.indexOf(fC.q)>=0)&&(!fC.type||c.type===fC.type)&&(!fC.status||c.status===fC.status)&&matchBand(c,fC.band);});$("#fcount").textContent=sar(rows.length)+" of "+sar(CLAIMS.length);
+    tableView({host:host,rows:rows,state:fC,defaultSort:"score",onRow:openClaim,cols:[{k:"id",h:"Claim",f:function(c){return '<span class="rowid">#'+c.id+'</span>';},v:function(c){return +c.id;}},{k:"date",h:"Date",f:function(c){return c.date;},v:function(c){return c.date;}},{k:"type",h:"Type",f:function(c){return c.type==="I"?"Inpatient":"Outpatient";},v:function(c){return c.type;}},{k:"status",h:"Status",f:function(c){return c.status==="N"?'<span class="muted">N</span>':st("LOW",c.status);},v:function(c){return c.status;}},{k:"amt",h:"Net SAR",r:true,f:function(c){return '<b class="num">'+sar(c.amt)+'</b>';},v:function(c){return c.amt;}},{k:"sv",h:"Services",r:true,f:function(c){return c.sv;},v:function(c){return c.sv;}},{k:"score",h:"Score",f:function(c){return scoreCell(c.sc);},v:function(c){return c.sc.final_score*1000+c.amt/100;}},{k:"hits",h:"Rule hits",f:function(c){return hitsCell(c.viol);},v:sevRank}]});}
+  w.querySelector(".toolbar").addEventListener("input",function(){fC.q=$("#fq").value.trim();fC.type=$("#ftype").value;fC.status=$("#fstatus").value;fC.band=$("#fband").value;fC.page=1;draw();});
+  $("#fclear").addEventListener("click",function(){fC={q:"",type:"",status:"",band:"",page:1};render();});draw();}
+function claimPayload(c){return {patient_id:"CSV_CLAIM_PATIENT_"+c.id,provider_id:"CSV_PROVIDER_UNKNOWN",diagnosis_codes:[],procedure_codes:[c.type==="I"?"99223":"99213"],medications:[],amount:c.amt,date:c.date,source_type:"csv_claim_summary",metadata:{claim_type:c.type,claim_status:c.status,services_rendered:c.sv}};}
+function openClaim(id){var c=CLAIMS.find(function(x){return x.id===id;});if(!c)return;openEntity({title:"Claim #"+c.id,kind:"claim",rec:c,payload:claimPayload(c),kv:[["Date",c.date],["Type",c.type==="I"?"Inpatient (I) → CPT 99223":"Outpatient (O) → CPT 99213"],["Status",c.status+" — "+(STATUS[c.status]||"")],["Net amount","<b>SAR "+sar(c.amt)+"</b>"],["Services rendered",String(c.sv)],["Provider",'<span class="muted">not in extract</span>'],["Member",'<span class="muted">not in extract</span>']]});}
+
+/* ======================= VIEW: providers ======================= */
+var fP={q:"",region:"",type:"",lic:"",band:"",page:1};
+function viewProviders(v){var s=stats();var w=el("div");var types=Object.keys(s.prov.byType).sort(function(a,b){return s.prov.byType[b]-s.prov.byType[a];});
+  w.innerHTML=pageHead("Providers",PROVS.length+" provider profiles from file 3 (licence, city, region, facility type, claim volume), scored with CSV-PROVIDER-001 to 003. Licence codes: A active, H on hold, C cancelled.")+
+    '<div class="grid three mb" style="grid-template-columns:1fr 1fr 1.2fr">'+panel("Licence status","non-active = HIGH",'<div class="pb"><div id="chLic" class="chart short"></div></div>')+panel("Claim volume bands","",'<div class="pb"><div id="chVol" class="chart short"></div></div>')+panel("Facility types","top 8",'<div class="pb"><div id="chTypes" class="chart short"></div></div>')+'</div>'+
+    '<section class="panel"><div class="toolbar"><div class="ctl search"><label>Search</label>'+ic("search")+'<input id="fq" placeholder="id or city" value="'+esc_(fP.q)+'"></div><div class="ctl"><label>Region</label><select id="fregion"><option value="">Any</option>'+["Center","West","East","South","North"].map(function(r){return '<option>'+r+'</option>';}).join("")+'</select></div><div class="ctl"><label>Facility</label><select id="ftype"><option value="">Any</option>'+types.map(function(t){return '<option>'+esc_(t)+'</option>';}).join("")+'</select></div><div class="ctl"><label>Licence</label><select id="flic"><option value="">Any</option><option value="A">Active</option><option value="H">On hold</option><option value="C">Cancelled</option></select></div>'+bandSel("fband")+'<button class="btn ghost sm" id="fclear" style="align-self:flex-end">Clear</button><span class="muted small" style="margin-left:auto;align-self:flex-end" id="fcount"></span></div><div id="host"></div></section>';
+  v.appendChild(w);var t=theme();
+  donut("chLic",[{name:"Active",value:s.prov.n-s.prov.nonActive,itemStyle:{color:t.c[0]}},{name:"On hold",value:PROVS.filter(function(p){return p.lic==="H";}).length,itemStyle:{color:t.crit}},{name:"Cancelled",value:PROVS.filter(function(p){return p.lic==="C";}).length,itemStyle:{color:t.warn}}]);
+  vbar("chVol",["≥ 100k","50k–100k","< 50k"],[{data:[{value:s.prov.extreme,itemStyle:{color:t.crit}},{value:s.prov.elevated,itemStyle:{color:t.warn}},{value:s.prov.n-s.prov.extreme-s.prov.elevated,itemStyle:{color:t.c[0]}}]}]);
+  hbar("chTypes",types.slice(0,8).map(function(x){return [x,s.prov.byType[x]];}));
+  $("#fregion").value=fP.region;$("#ftype").value=fP.type;$("#flic").value=fP.lic;$("#fband").value=fP.band;var host=$("#host");
+  function draw(){var q=fP.q.toLowerCase();var rows=PROVS.filter(function(p){return (!q||(p.id+" "+p.city).toLowerCase().indexOf(q)>=0)&&(!fP.region||p.region===fP.region)&&(!fP.type||p.type===fP.type)&&(!fP.lic||p.lic===fP.lic)&&matchBand(p,fP.band);});$("#fcount").textContent=sar(rows.length)+" of "+sar(PROVS.length);
+    tableView({host:host,rows:rows,state:fP,defaultSort:"score",onRow:openProvider,cols:[{k:"id",h:"Provider",f:function(p){return '<span class="rowid">#'+p.id+'</span>';},v:function(p){return +p.id;}},{k:"type",h:"Facility",f:function(p){return esc_(p.type);},v:function(p){return p.type;}},{k:"city",h:"Location",f:function(p){return esc_(p.city)+' <span class="sub">'+p.region+'</span>';},v:function(p){return p.city;}},{k:"lic",h:"Licence",f:function(p){return p.lic==="A"?'<span class="muted">Active</span>':st("HIGH",LIC[p.lic]||p.lic);},v:function(p){return p.lic;}},{k:"vol",h:"Claim volume",r:true,f:function(p){return '<b class="num">'+sar(p.vol)+'</b>';},v:function(p){return p.vol;}},{k:"score",h:"Score",f:function(p){return scoreCell(p.sc);},v:function(p){return p.sc.final_score*1e7+p.vol;}},{k:"hits",h:"Rule hits",f:function(p){return hitsCell(p.viol);},v:sevRank}]});}
+  w.querySelector(".toolbar").addEventListener("input",function(){fP.q=$("#fq").value.trim();fP.region=$("#fregion").value;fP.type=$("#ftype").value;fP.lic=$("#flic").value;fP.band=$("#fband").value;fP.page=1;draw();});
+  $("#fclear").addEventListener("click",function(){fP={q:"",region:"",type:"",lic:"",band:"",page:1};render();});draw();}
+function providerPayload(p){return {patient_id:"CSV_PROVIDER_PROFILE_"+p.id,provider_id:"PROV-"+p.id,diagnosis_codes:[],procedure_codes:[],medications:[],amount:0,date:"2025-01-20",source_type:"csv_provider_profile",metadata:{licensing_status:p.lic,city:p.city,region:p.region,provider_type:p.type,volume_of_claims:p.vol}};}
+function openProvider(id){var p=PROVS.find(function(x){return x.id===id;});if(!p)return;var peers=PROVS.filter(function(x){return x.type===p.type;});var med=peers.map(function(x){return x.vol;}).sort(function(a,b){return a-b;})[Math.floor(peers.length/2)]||1;
+  openEntity({title:esc_(p.type)+" #"+p.id,kind:"provider",rec:p,payload:providerPayload(p),kv:[["Facility",esc_(p.type)],["Location",esc_(p.city)+", "+p.region+" region"],["Licence",p.lic+" — "+(LIC[p.lic]||"")],["Claim volume","<b>"+sar(p.vol)+"</b>"],["vs. type median",(p.vol/med).toFixed(1)+"× the "+esc_(p.type)+" median ("+sar(med)+")"]]});}
+
+/* ======================= VIEW: members ======================= */
+var fM={q:"",region:"",age:"",policy:"",cond:"",band:"",page:1};
+function viewMembers(v){var s=stats();var w=el("div");
+  w.innerHTML=pageHead("Members",MEMS.length+" member profiles from file 1 (gender, city, region, policy, chronic conditions, healthcare visits, age group), scored with CSV-MEMBER-001 and 002. The importer maps age group to a representative age and chronic flags to diagnoses.")+
+    '<div class="grid three mb" style="grid-template-columns:1.2fr 1fr 1fr">'+panel("Healthcare visits","100+ triggers CSV-MEMBER-001",'<div class="pb"><div id="chVis" class="chart short"></div></div>')+panel("Chronic conditions",s.mem.chronic+" chronic members",'<div class="pb"><div id="chCond" class="chart short"></div></div>')+panel("Age groups","",'<div class="pb"><div id="chAge" class="chart short"></div></div>')+'</div>'+
+    '<section class="panel"><div class="toolbar"><div class="ctl search"><label>Search</label>'+ic("search")+'<input id="fq" placeholder="member id" value="'+esc_(fM.q)+'"></div><div class="ctl"><label>Region</label><select id="fregion"><option value="">Any</option>'+Object.keys(s.mem.byRegion).map(function(r){return '<option>'+r+'</option>';}).join("")+'</select></div><div class="ctl"><label>Age</label><select id="fage"><option value="">Any</option>'+["0-18","19-30","31-45","46-60","61+"].map(function(a){return '<option>'+a+'</option>';}).join("")+'</select></div><div class="ctl"><label>Policy</label><select id="fpolicy"><option value="">Any</option>'+Object.keys(s.mem.byPolicy).map(function(p){return '<option>'+esc_(p)+'</option>';}).join("")+'</select></div><div class="ctl"><label>Condition</label><select id="fcond"><option value="">Any</option><option value="chronic">Chronic</option><option value="dm">Diabetes</option><option value="htn">Hypertension</option><option value="dys">Dyslipidemia</option><option value="thy">Thyroid</option><option value="cad">CAD</option></select></div>'+bandSel("fband")+'<button class="btn ghost sm" id="fclear" style="align-self:flex-end">Clear</button><span class="muted small" style="margin-left:auto;align-self:flex-end" id="fcount"></span></div><div id="host"></div></section>';
+  v.appendChild(w);
+  hist("chVis",MEMS.map(function(m){return m.visits;}),[0,10,20,30,40,50,75,100,150,200,300],100);
+  var ci=Object.keys(s.mem.cond).map(function(k){return [k,s.mem.cond[k]];}).sort(function(a,b){return b[1]-a[1];});hbar("chCond",ci);
+  vbar("chAge",["0-18","19-30","31-45","46-60","61+"],[{data:["0-18","19-30","31-45","46-60","61+"].map(function(a){return s.mem.byAge[a]||0;})}]);
+  $("#fregion").value=fM.region;$("#fage").value=fM.age;$("#fpolicy").value=fM.policy;$("#fcond").value=fM.cond;$("#fband").value=fM.band;var host=$("#host");
+  function draw(){var rows=MEMS.filter(function(m){return (!fM.q||m.id.indexOf(fM.q)>=0)&&(!fM.region||m.region===fM.region)&&(!fM.age||m.age===fM.age)&&(!fM.policy||m.policy===fM.policy)&&(!fM.cond||m[fM.cond])&&matchBand(m,fM.band);});$("#fcount").textContent=sar(rows.length)+" of "+sar(MEMS.length);
+    tableView({host:host,rows:rows,state:fM,defaultSort:"score",onRow:openMember,cols:[{k:"id",h:"Member",f:function(m){return '<span class="rowid">#'+m.id+'</span>';},v:function(m){return +m.id;}},{k:"prof",h:"Profile",f:function(m){return (m.g==="M"?"Male":"Female")+' <span class="sub">'+m.age+'</span>';},v:function(m){return m.age;}},{k:"city",h:"Location",f:function(m){return esc_(m.city)+' <span class="sub">'+m.region+'</span>';},v:function(m){return m.city;}},{k:"policy",h:"Policy",f:function(m){return esc_(m.policy);},v:function(m){return m.policy;}},{k:"cond",h:"Conditions",f:function(m){var c=[];if(m.dm)c.push("DM");if(m.htn)c.push("HTN");if(m.dys)c.push("DYS");if(m.thy)c.push("THY");if(m.cad)c.push("CAD");return c.length?'<div class="tagset">'+c.map(function(x){return tag(x);}).join("")+'</div>':'<span class="muted">—</span>';},v:function(m){return m.dm+m.htn+m.dys+m.thy+m.cad;}},{k:"visits",h:"Visits",r:true,f:function(m){return '<b class="num">'+m.visits+'</b>';},v:function(m){return m.visits;}},{k:"score",h:"Score",f:function(m){return scoreCell(m.sc);},v:function(m){return m.sc.final_score*1000+m.visits;}},{k:"hits",h:"Rule hits",f:function(m){return hitsCell(m.viol);},v:sevRank}]});}
+  w.querySelector(".toolbar").addEventListener("input",function(){fM.q=$("#fq").value.trim();fM.region=$("#fregion").value;fM.age=$("#fage").value;fM.policy=$("#fpolicy").value;fM.cond=$("#fcond").value;fM.band=$("#fband").value;fM.page=1;draw();});
+  $("#fclear").addEventListener("click",function(){fM={q:"",region:"",age:"",policy:"",cond:"",band:"",page:1};render();});draw();}
+function memberPayload(m){var dx=[];if(m.dm)dx.push("diabetes");if(m.htn)dx.push("hypertension");return {patient_id:"MEM-"+m.id,provider_id:"CSV_PROVIDER_UNKNOWN",diagnosis_codes:dx,procedure_codes:[],medications:[],amount:0,date:"2025-01-01",patient_age:AGE_MID[m.age]||null,source_type:"csv_member_profile",metadata:{gender:m.g,city:m.city,region:m.region,policy_type:m.policy,age_group:m.age,total_healthcare_visits:m.visits,conditions:{chronic:!!m.chronic,diabetes:!!m.dm,hypertension:!!m.htn,cad:!!m.cad,dyslipidemia:!!m.dys,thyroid_disease:!!m.thy}}};}
+function openMember(id){var m=MEMS.find(function(x){return x.id===id;});if(!m)return;var cond=[];if(m.chronic)cond.push("chronic");if(m.dm)cond.push("diabetes");if(m.htn)cond.push("hypertension");if(m.dys)cond.push("dyslipidemia");if(m.thy)cond.push("thyroid disease");if(m.cad)cond.push("CAD");
+  openEntity({title:"Member #"+m.id,kind:"member",rec:m,payload:memberPayload(m),kv:[["Profile",(m.g==="M"?"Male":"Female")+", age group "+m.age],["Location",esc_(m.city)+", "+m.region],["Policy",esc_(m.policy)],["Conditions",cond.length?cond.join(", "):"none recorded"],["Healthcare visits","<b>"+m.visits+"</b> <span class='muted'>(extract mean 32)</span>"]]});}
+
+/* ======================= inspector drawer ======================= */
+function openEntity(o){var r=o.rec,sc=r.sc;$("#drawerTitle").textContent=o.title;var tabs=$("#dtabs");tabs.hidden=false;tabs.innerHTML='<button class="on" data-t="overview">Overview</button><button data-t="rules">Rules ('+r.viol.length+')</button><button data-t="ai">AI review</button><button data-t="payload">Payload</button>';
+  var body=$("#drawerBody");var fc=sc.risk_category==="HIGH"?"--crit":sc.risk_category==="MEDIUM"?"--warn":"--ok";
+  var T={};
+  T.overview='<section class="panel"><div class="pb"><div class="row" style="align-items:center;justify-content:space-between"><div class="bigscore"><b style="color:var('+fc+')">'+sc.final_score.toFixed(0)+'</b><span>/ 100 &nbsp;'+st(sc.risk_category)+'</span></div>'+(sc.escalate?'<span class="esc">'+ic("alert-triangle")+'Escalate</span>':'<span class="muted small">No escalation (requires HIGH)</span>')+'</div><div class="tagset mt" style="margin-top:10px">'+(sc.fraud_flags.map(flagTag).join("")||'<span class="muted small">no flags</span>')+'</div><div class="mt" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="openCaseBtn">'+ic("folder-open")+'Open as case</button><span class="hint">'+ic("info")+'Creates a full case record with pipeline trace and report</span></div></div></section>'+
+    panel("Score breakdown","FraudScorerAgent · bulk-import path",'<div class="pb">'+breakdown(sc,true)+'</div>')+panel("Record","",'<div class="pb"><dl class="kv">'+o.kv.map(function(k){return '<dt>'+k[0]+'</dt><dd>'+k[1]+'</dd>';}).join("")+'</dl></div>');
+  T.rules=panel("Rule violations","RuleEngineAgent",'<div class="pb">'+violList(r.viol)+'</div>');
+  T.ai=panel("Run the skipped LLM stage","ClinicalReasonerAgent",'<div class="pb"><p class="muted" style="margin:0 0 10px">Runs the reasoner on this row with the backend’s real prompt and the exact payload the importer builds, then re-scores with the production formula.</p><div class="aihead" style="margin-bottom:8px">'+ic("sparkles")+'<span class="small muted">Clinical rationale</span><span class="state" id="aiTag">stage off</span></div><div class="ai muted" id="aiText">Not run yet.</div><div id="aiOut"></div><div class="mt" style="margin-top:12px"><button class="btn primary" id="aiBtn">'+ic("play")+'Run AI review</button></div></div>');
+  T.payload=panel("Importer payload","csv_import.py → ClaimPayload",'<div class="pb"><pre class="code">'+esc_(JSON.stringify(o.payload,null,2))+'</pre></div>');
+  function show(t){body.innerHTML=T[t];icons();tabs.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.t===t);});if(t==="ai")bindAI();
+    if(t==="overview"){$("#openCaseBtn").addEventListener("click",function(){var c=caseFromRow(o.kind,r,o.payload,o.title);closeDrawer();openCase(c.id);});}}
+  function bindAI(){$("#aiBtn").addEventListener("click",async function(){var btn=this,txt=$("#aiText"),tg=$("#aiTag"),out=$("#aiOut");btn.disabled=true;tg.textContent="running…";txt.classList.remove("muted");txt.textContent="";
+    var res=await runReasoner(o.payload,function(oo){txt.textContent=oo.text;});
+    if(!res.ok){tg.textContent="unavailable";txt.textContent=res.reason==="unavailable"?"The AI runtime isn’t available in this view. On the live system this stage runs on Groq (gpt-oss-20b) when run_llm=true.":"The model reply could not be parsed as the reasoner schema. Try again.";btn.disabled=false;return;}
+    var llm=res.result,sc2=fraudScore(llm,r.viol,NO_GRAPH);txt.textContent=(llm.rationale||[]).map(function(x){return "• "+x;}).join("\n")||"(no rationale returned)";
+    out.innerHTML='<div class="mt">'+panel("Re-scored with LLM stage on","LLM "+llm.llm_risk_score+" · "+esc_(llm.overall_risk),'<div class="pb">'+breakdown(sc2,false)+'<div class="row mt" style="justify-content:space-between;align-items:center"><span>Before <b>'+sc.final_score.toFixed(1)+'</b> '+st(sc.risk_category)+'</span>'+ic("arrow-right")+'<span>After <b>'+sc2.final_score.toFixed(1)+'</b> '+st(sc2.risk_category)+(sc2.escalate?' <span class="esc">Escalate</span>':'')+'</span></div><div class="tagset mt" style="margin-top:10px">'+sc2.fraud_flags.map(flagTag).join("")+'</div></div>')+'</div>';icons();tg.textContent="AI generated";btn.disabled=false;});}
+  tabs.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.t);});});
+  show("overview");openDrawer();}
+
+/* ======================= VIEW: analyze ======================= */
+var TEST_CASES=[
+ {id:1,name:"Diabetes Upcoding",description:"Comprehensive office visit (99215) billed for routine diabetes check — likely upcoding.",fraud_type:"Upcoding",disease:"Diabetes",payload:{patient_id:"P001",provider_id:"DR001",diagnosis_codes:["E11.9"],procedure_codes:["99215"],medications:["insulin"],amount:450,date:"2024-01-15"}},
+ {id:2,name:"Phantom Appendectomy",description:"Appendectomy billed with no corresponding diagnosis or hospital admission record.",fraud_type:"Phantom Billing",disease:"General",payload:{patient_id:"P002",provider_id:"DR002",diagnosis_codes:["K37"],procedure_codes:["44950"],medications:[],amount:8500,date:"2024-01-20"}},
+ {id:3,name:"Duplicate Claim",description:"Same procedure billed twice by the same provider for the same patient.",fraud_type:"Duplicate Billing",disease:"General",payload:{patient_id:"P003",provider_id:"DR003",diagnosis_codes:["I10"],procedure_codes:["99213"],medications:[],amount:150,date:"2024-01-22"}},
+ {id:4,name:"Doctor Shopping Patient",description:"Patient visited 4 different providers in 30 days seeking controlled substances.",fraud_type:"Patient Fraud",disease:"General",payload:{patient_id:"P004",provider_id:"DR004",diagnosis_codes:["M54.5"],procedure_codes:["99213"],medications:["morphine"],amount:200,date:"2024-01-25"}},
+ {id:5,name:"Asthma Bronchodilator Burst",description:"Three bronchodilator treatments billed in a single visit — excessive for standard asthma care.",fraud_type:"Unnecessary Procedures",disease:"Asthma",payload:{patient_id:"P005",provider_id:"DR005",diagnosis_codes:["J45.909"],procedure_codes:["94010","94640","94060"],medications:["salbutamol"],amount:750,date:"2024-02-01"}},
+ {id:6,name:"Influenza Extended Antiviral",description:"Oseltamivir prescribed for 10 days — exceeds the standard 5-day treatment course.",fraud_type:"Abnormal Prescribing",disease:"Influenza",payload:{patient_id:"P006",provider_id:"DR006",diagnosis_codes:["J11.1"],procedure_codes:["99213"],medications:["oseltamivir"],amount:180,date:"2024-02-05"}},
+ {id:7,name:"RA Contraindicated Combo",description:"Methotrexate + ibuprofen prescribed for RA without CBC monitoring — contraindicated combination.",fraud_type:"Contraindication",disease:"Rheumatoid Arthritis",payload:{patient_id:"P007",provider_id:"DR007",diagnosis_codes:["M06.9"],procedure_codes:["99215"],medications:["methotrexate","ibuprofen"],amount:380,date:"2024-02-10"}},
+ {id:8,name:"IBS Repeat Colonoscopy",description:"Colonoscopy billed within 12 months of a previous one for an IBS patient.",fraud_type:"Unnecessary Procedure",disease:"IBS",payload:{patient_id:"P008",provider_id:"DR008",diagnosis_codes:["K58.9"],procedure_codes:["45378"],medications:[],amount:2200,date:"2024-02-15"}},
+ {id:9,name:"Opioid Over-Prescribing",description:"Morphine prescribed at 5000mg/month — far exceeding the 3000mg monthly limit.",fraud_type:"Controlled Drug Abuse",disease:"General",payload:{patient_id:"P009",provider_id:"DR009",diagnosis_codes:["M54.5"],procedure_codes:["99215"],medications:["morphine"],amount:600,date:"2024-02-20"}},
+ {id:10,name:"Provider Referral Loop",description:"Provider A refers to Provider B who refers back to Provider A — classic referral loop fraud.",fraud_type:"Network Fraud",disease:"General",payload:{patient_id:"P010",provider_id:"DR010",diagnosis_codes:["Z00.00"],procedure_codes:["99213"],medications:[],amount:300,date:"2024-02-25",referral_provider_id:"DR011"}}];
+var HISTORY=[],GRAPH_EDGES=[["provider:DR011","patient:P010"],["patient:P010","provider:DR010"]];
+var PROHIBITED={"27446+27447":"Bilateral and partial knee replacement billed on same day","44950+44960":"Appendectomy + incidental appendectomy billed together","99213+99215":"Two office visit levels billed for same encounter","93000+93010":"Complete and component ECG billed simultaneously"};
+var PEDS=["99381","99382","99383","99391","99392","90460","90461"];
+function ruleEngine(p){var v=[],procs=p.procedure_codes||[],dx=p.diagnosis_codes||[],meds=(p.medications||[]).map(function(m){return String(m).toLowerCase();}),d=new Date(p.date||Date.now());
+  Object.keys(PROHIBITED).forEach(function(k){if(k.split("+").every(function(c){return procs.indexOf(c)>=0;}))v.push(V("CHI-001","HIGH",PROHIBITED[k],"Prohibited CPT combination: "+k));});
+  if(p.patient_age!=null)procs.forEach(function(c){if(PEDS.indexOf(c)>=0&&p.patient_age>=18)v.push(V("CHI-002","MEDIUM","Pediatric-only CPT "+c+" billed for adult patient (age "+p.patient_age+")","CPT "+c+" restricted to patients under 18"));});
+  var win=new Date(d);win.setDate(win.getDate()-30);var dup=HISTORY.find(function(h){return h.patient_id===p.patient_id&&h.provider_id===p.provider_id&&new Date(h.date)>=win&&(h.procedure_codes||[]).some(function(c){return procs.indexOf(c)>=0;});});
+  if(dup)v.push(V("CHI-003","HIGH","Duplicate billing detected","Same CPT codes billed within 30 days: "+dup.procedure_codes.filter(function(c){return procs.indexOf(c)>=0;}).join(", ")+" (case "+dup.case_id+")"));
+  if(dx.some(function(c){return c==="E11.9"||c==="E10.9";})&&meds.indexOf("insulin")>=0&&procs.indexOf("83036")<0)v.push(V("CHI-005","LOW","Insulin prescribed without A1C monitoring","Diabetic patient on insulin with no A1C test (CPT 83036) in claim"));
+  var bd=["94010","94640","94060"].filter(function(c){return procs.indexOf(c)>=0;}).length;if(dx.indexOf("J45.909")>=0&&bd>=3)v.push(V("CHI-006","MEDIUM","Excessive bronchodilator billing for asthma",bd+" bronchodilator procedures billed in single claim"));
+  if(dx.indexOf("M06.9")>=0&&meds.indexOf("methotrexate")>=0&&(meds.indexOf("ibuprofen")>=0||meds.indexOf("naproxen")>=0)&&procs.indexOf("85027")<0)v.push(V("CHI-007","MEDIUM","Methotrexate + NSAID combination without CBC monitoring","RA patient on methotrexate+NSAID without CBC (CPT 85027)"));
+  if(dx.indexOf("K58.9")>=0&&procs.indexOf("45378")>=0){var y=new Date(d);y.setDate(y.getDate()-365);var prior=HISTORY.find(function(h){return h.patient_id===p.patient_id&&new Date(h.date)>=y&&(h.procedure_codes||[]).indexOf("45378")>=0;});if(prior)v.push(V("CHI-008","MEDIUM","Repeat colonoscopy within 12 months for IBS","Prior colonoscopy found in case "+prior.case_id));}
+  var provs={};HISTORY.forEach(function(h){if(h.patient_id===p.patient_id&&new Date(h.date)>=win)provs[h.provider_id]=1;});provs[p.provider_id]=1;var n=Object.keys(provs).length;if(n>=3)v.push(V("CHI-010","HIGH","Doctor shopping detected","Patient visited "+n+" different providers in 30 days"));
+  /* _check_csv_profile_rules */
+  var stp=p.source_type||"",md=p.metadata||{};
+  if(stp==="csv_member_profile")v=v.concat(csvRules("member",{visits:+md.total_healthcare_visits||0}));
+  if(stp==="csv_claim_summary")v=v.concat(csvRules("claim",{amt:+p.amount||0,sv:+md.services_rendered||0,status:md.claim_status||""}));
+  if(stp==="csv_provider_profile")v=v.concat(csvRules("provider",{lic:md.licensing_status||"",vol:+md.volume_of_claims||0}));
+  return v;}
+
+/* ======================= case store (per-viewer) ======================= */
+var CASE_STORE=[];var caseSel=null;
+function loadCases(){try{var s=localStorage.getItem("fs-cases");if(s)CASE_STORE=JSON.parse(s)||[];}catch(e){CASE_STORE=[];}}
+function persistCases(){try{localStorage.setItem("fs-cases",JSON.stringify(CASE_STORE.slice(0,200)));}catch(e){}var n=$("#nCases");if(n)n.textContent=CASE_STORE.length;}
+function newCaseId(){return "FS-"+Math.random().toString(16).slice(2,8).toUpperCase();}
+function evidenceOf(llm,viols,graph){var ev=(llm.rationale||[]).slice();viols.forEach(function(x){ev.push("["+x.severity+"] "+x.description+": "+x.evidence);});if(graph.referral_loop)ev.push("Graph analysis: Referral loop detected in provider network");if(graph.burst_detected)ev.push("Graph analysis: Burst billing detected (>10 claims in 24h)");if((graph.centrality_score||0)>0.1)ev.push("Graph analysis: High provider centrality score ("+(+graph.centrality_score).toFixed(3)+")");return ev;}
+function traceOf(c){var p=c.payload,bulk=c.source==="dataset";return [
+  {agent:"IngestorAgent",status:"completed",summary:(bulk?"CSV row ingested":"Case ingested")+": "+c.id},
+  {agent:"OCRExtractorAgent",status:p.document_base64?"completed":"skipped",summary:p.document_base64?"OCR: text extracted":(bulk?"CSV row does not require OCR":"OCR: no document")},
+  {agent:"NormalizerAgent",status:"completed",summary:"Codes normalized to ICD-10/CPT/ATC"},
+  {agent:"ClinicalReasonerAgent",status:c.llmSource==="skipped"?"skipped":"completed",summary:c.llmSource==="skipped"?"LLM skipped for CSV bulk import":"LLM risk assessment: "+c.llm.overall_risk+" ("+c.llm.llm_risk_score+")"+(c.llmSource==="fallback"?" · offline heuristic":"")},
+  {agent:"RuleEngineAgent",status:"completed",summary:c.viols.length+" rule violation(s) found"},
+  {agent:"GraphAnalyticsAgent",status:c.graphRun?"completed":"skipped",summary:c.graphRun?"Graph risk score: "+c.graph.graph_risk_score:"Graph analytics skipped for CSV bulk import"},
+  {agent:"FraudScorerAgent",status:"completed",summary:"Final score: "+c.sc.final_score+" ("+c.sc.risk_category+")"},
+  {agent:"CaseManagerAgent",status:"completed",summary:"Report generated, escalate="+c.sc.escalate},
+  {agent:"AuditAgent",status:bulk?"skipped":"completed",summary:bulk?"Per-step audit logging skipped for CSV bulk import":"Audit log written for case "+c.id}];}
+function makeCase(o){var c={id:o.id||newCaseId(),name:o.name,source:o.source,created:new Date().toISOString(),status:"completed",payload:o.payload,llm:o.llm,llmSource:o.llmSource,viols:o.viols,graph:o.graph,graphRun:!!o.graphRun};
+  c.sc=fraudScore(c.llm,c.viols,c.graph);c.ev=evidenceOf(c.llm,c.viols,c.graph);c.trace=traceOf(c);return c;}
+function saveCase(c){var i=CASE_STORE.findIndex(function(x){return x.id===c.id;});if(i>=0)CASE_STORE[i]=c;else CASE_STORE.unshift(c);persistCases();return c;}
+function caseFromRow(kind,rec,payload,name){var c=makeCase({name:name,source:"dataset",payload:payload,llm:NO_LLM,llmSource:"skipped",viols:rec.viol,graph:NO_GRAPH,graphRun:false});c.rowKind=kind;c.rowId=rec.id;return saveCase(c);}
+function seedCases(){if(CASE_STORE.length)return;TEST_CASES.slice().reverse().forEach(function(t){var p=t.payload;var c=makeCase({name:t.name,source:"test-case",payload:p,llm:heuristicLLM(p),llmSource:"fallback",viols:ruleEngine(p),graph:graphAgent(p),graphRun:true});HISTORY.push(Object.assign({case_id:c.id},p));CASE_STORE.unshift(c);});persistCases();}
+function openCase(id){caseSel=id;if(current()==="cases")render();else go("cases");}
+
+/* ======================= VIEW: cases ======================= */
+var fK={risk:"",esc:"",page:1};
+function viewCases(v){var w=el("div");
+  if(caseSel){var c=CASE_STORE.find(function(x){return x.id===caseSel;});if(c){renderCaseDetail(w,c);v.appendChild(w);return;}caseSel=null;}
+  w.innerHTML=pageHead("Case Queue",CASE_STORE.length+" cases. Every pipeline run and every dataset row you open as a case lands here with its full report, exactly as the backend stores it. Click a row for the detail page.",'<button class="btn" id="goAnalyze">'+ic("scan-search")+'New analysis</button>')+
+    '<section class="panel"><div class="toolbar"><div class="ctl"><label>Risk</label><select id="frisk"><option value="">Any</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></div><div class="ctl"><label>Escalation</label><select id="fesc"><option value="">Any</option><option value="1">Escalated</option><option value="0">Not escalated</option></select></div><button class="btn ghost sm" id="fclear" style="align-self:flex-end">Clear</button><span class="muted small" style="margin-left:auto;align-self:flex-end" id="fcount"></span></div><div id="host"></div></section>';
+  v.appendChild(w);$("#frisk").value=fK.risk;$("#fesc").value=fK.esc;var host=$("#host");
+  function draw(){var rows=CASE_STORE.filter(function(c){return (!fK.risk||c.sc.risk_category===fK.risk)&&(fK.esc===""||c.sc.escalate===(fK.esc==="1"));});$("#fcount").textContent=rows.length+" of "+CASE_STORE.length;
+    if(!CASE_STORE.length){host.innerHTML='<div class="empty">No cases yet. Run a claim on the Analyze page, or open any claim, provider or member and choose “Open as case”.</div>';return;}
+    tableView({host:host,rows:rows,state:fK,defaultSort:"created",rowLabel:"Open",onRow:function(id){openCase(id);},cols:[{k:"id",h:"Case",f:function(c){return '<span class="rowid">'+c.id+'</span>';},v:function(c){return c.id;}},{k:"name",h:"Subject",f:function(c){return esc_(c.name)+' <span class="sub">'+(c.source==="dataset"?"dataset row":c.source==="test-case"?"test case":"manual")+'</span>';},v:function(c){return c.name;}},{k:"created",h:"Created",f:function(c){return new Date(c.created).toLocaleString();},v:function(c){return c.created;}},{k:"pp",h:"Patient / provider",f:function(c){return '<span class="mono">'+esc_(c.payload.patient_id)+'</span> <span class="sub">'+esc_(c.payload.provider_id)+'</span>';},v:function(c){return c.payload.provider_id;}},{k:"score",h:"Score",f:function(c){return scoreCell(c.sc);},v:function(c){return c.sc.final_score;}},{k:"flags",h:"Flags",f:function(c){return c.sc.fraud_flags.length?'<div class="tagset">'+c.sc.fraud_flags.slice(0,3).map(flagTag).join("")+(c.sc.fraud_flags.length>3?'<span class="tag">+'+(c.sc.fraud_flags.length-3)+'</span>':'')+'</div>':'<span class="muted">—</span>';},v:function(c){return c.sc.fraud_flags.length;}},{k:"esc",h:"Escalate",f:function(c){return c.sc.escalate?'<span class="esc">'+ic("alert-triangle")+'SIU</span>':'<span class="muted">—</span>';},v:function(c){return c.sc.escalate?1:0;}},{k:"llm",h:"AI stage",f:function(c){return c.llmSource==="live"?st("ok","Live"):c.llmSource==="fallback"?st("muted","Offline"):st("warn","Skipped");},v:function(c){return c.llmSource;}}]});}
+  w.querySelector(".toolbar").addEventListener("input",function(){fK.risk=$("#frisk").value;fK.esc=$("#fesc").value;fK.page=1;draw();});
+  $("#fclear").addEventListener("click",function(){fK={risk:"",esc:"",page:1};render();});$("#goAnalyze").addEventListener("click",function(){go("analyze");});draw();}
+function traceHtml(tr){return '<div class="steps trace">'+tr.map(function(s,i){return '<div class="step '+(s.status==="completed"?"done":s.status==="skipped"?"skip":"")+'"><span class="dot">'+(i+1)+'</span><div><div class="nm">'+s.agent+'</div><div class="ds">'+esc_(s.summary)+'</div></div><span class="stt">'+s.status+'</span></div>';}).join("")+'</div>';}
+function renderCaseDetail(w,c){var sc=c.sc,fc=sc.risk_category==="HIGH"?"--crit":sc.risk_category==="MEDIUM"?"--warn":"--ok",p=c.payload;
+  w.innerHTML='<div class="ph"><div><div class="crumbs">Fraudspect / <a href="#cases" id="backCases" style="text-decoration:none">Case Queue</a> / <b>'+c.id+'</b></div><h1>'+esc_(c.name)+'</h1><p>'+(c.source==="dataset"?"Opened from the "+(c.rowKind||"dataset")+" table":c.source==="test-case"?"Test case from the backend library":"Manual claim")+' · created '+new Date(c.created).toLocaleString()+'</p></div>'+
+    '<div class="actions"><button class="btn" id="backBtn">'+ic("chevron-left")+'Back</button><button class="btn primary" id="reproc">'+ic("play")+(c.llmSource==="skipped"?"Process with AI and graph":"Reprocess case")+'</button></div></div>'+
+    '<div class="grid two mb" style="grid-template-columns:1fr 1fr">'+
+      '<section class="panel"><div class="pt"><h2>Result</h2><span class="meta">status '+c.status+'</span></div><div class="pb"><div class="row" style="align-items:center;justify-content:space-between"><div class="bigscore"><b style="color:var('+fc+')">'+sc.final_score.toFixed(0)+'</b><span>/ 100 &nbsp;'+st(sc.risk_category)+'</span></div>'+(sc.escalate?'<span class="esc">'+ic("alert-triangle")+'Escalation required</span>':'<span class="muted small">No escalation</span>')+'</div><div class="tagset" style="margin:12px 0 16px">'+(sc.fraud_flags.map(flagTag).join("")||'<span class="muted small">no flags</span>')+'</div>'+breakdown(sc,c.llmSource==="skipped")+'<dl class="kv mt"><dt>Patient</dt><dd class="mono">'+esc_(p.patient_id)+'</dd><dt>Provider</dt><dd class="mono">'+esc_(p.provider_id)+'</dd><dt>Amount</dt><dd>SAR '+sar(p.amount||0)+'</dd><dt>Date</dt><dd>'+esc_(p.date||"")+'</dd><dt>Diagnoses</dt><dd>'+((p.diagnosis_codes||[]).map(function(x){return tag(x);}).join(" ")||'<span class="muted">—</span>')+'</dd><dt>Procedures</dt><dd>'+((p.procedure_codes||[]).map(function(x){return tag(x);}).join(" ")||'<span class="muted">—</span>')+'</dd><dt>Medications</dt><dd>'+((p.medications||[]).map(function(x){return tag(x);}).join(" ")||'<span class="muted">—</span>')+'</dd></dl></div></section>'+
+      panel("Pipeline trace","9 agents",'<div class="pb">'+traceHtml(c.trace)+'</div>')+'</div>'+
+    '<div class="grid two mb" style="grid-template-columns:1fr 1fr">'+
+      panel("AI clinical analysis",c.llmSource==="skipped"?"stage skipped":c.llmSource==="live"?"ClinicalReasonerAgent (live) · LLM "+c.llm.llm_risk_score:"offline heuristic · LLM "+c.llm.llm_risk_score,'<div class="pb"><div class="ai'+(c.llmSource==="skipped"?" muted":"")+'" id="caseAi">'+esc_((c.llm.rationale||[]).map(function(x){return "• "+x;}).join("\n"))+'</div></div>')+
+      panel("Rule violations ("+c.viols.length+")","RuleEngineAgent",'<div class="pb">'+violList(c.viols)+'</div>')+'</div>'+
+    '<div class="grid two mb" style="grid-template-columns:1fr 1fr">'+
+      panel("Graph analytics",c.graphRun?"GraphAnalyticsAgent":"stage skipped",'<div class="pb"><dl class="kv"><dt>Graph risk</dt><dd class="mono">'+c.graph.graph_risk_score+'</dd><dt>Centrality</dt><dd class="mono">'+c.graph.centrality_score+'</dd><dt>Referral loop</dt><dd>'+(c.graph.referral_loop?st("HIGH","Detected"):'<span class="muted">None</span>')+'</dd><dt>Burst billing</dt><dd>'+(c.graph.burst_detected?st("HIGH","Detected"):'<span class="muted">None</span>')+'</dd></dl></div>')+
+      panel("Evidence summary","CaseManagerAgent",'<div class="pb">'+(c.ev.length?'<ul style="margin:0;padding-left:18px;line-height:1.6">'+c.ev.map(function(e){return '<li>'+esc_(e)+'</li>';}).join("")+'</ul>':'<span class="muted">No evidence recorded.</span>')+'</div>')+'</div>'+
+    panel("Stored claim payload","raw_payload",'<div class="pb"><pre class="code">'+esc_(JSON.stringify(p,null,2))+'</pre></div>');
+  function back(e){if(e)e.preventDefault();caseSel=null;render();}
+  $("#backBtn").addEventListener("click",back);$("#backCases").addEventListener("click",back);
+  $("#reproc").addEventListener("click",function(){reprocessCase(c);});}
+async function reprocessCase(c){var btn=$("#reproc");btn.disabled=true;btn.innerHTML='<span class="spin"></span> Processing…';var ai=$("#caseAi");if(ai){ai.classList.remove("muted");ai.textContent="Calling ClinicalReasonerAgent…";}
+  var p=c.payload;var rr=await runReasoner(p,function(o){if(ai)ai.textContent=o.text;});var llm,src;if(rr.ok){llm=rr.result;src="live";}else{llm=heuristicLLM(p);src="fallback";}
+  var viols=ruleEngine(p),graph=graphAgent(p);HISTORY.push(Object.assign({case_id:c.id},p));
+  var n=makeCase({id:c.id,name:c.name,source:c.source,payload:p,llm:llm,llmSource:src,viols:viols,graph:graph,graphRun:true});n.created=c.created;n.rowKind=c.rowKind;n.rowId=c.rowId;saveCase(n);caseSel=n.id;render();}
+function graphAgent(p){var pr="provider:"+p.provider_id,pt="patient:"+p.patient_id;GRAPH_EDGES.push([pr,pt]);if(p.referral_provider_id)GRAPH_EDGES.push([pt,"provider:"+p.referral_provider_id]);var adj={};GRAPH_EDGES.forEach(function(e){(adj[e[0]]=adj[e[0]]||[]).push(e[1]);});
+  function reach(f,t,seen){if(f===t)return true;seen[f]=1;return (adj[f]||[]).some(function(n){return !seen[n]&&reach(n,t,seen);});}var loop=(adj[pr]||[]).some(function(n){return reach(n,pr,{});});
+  var burst=HISTORY.filter(function(h){return h.provider_id===p.provider_id&&h.date===p.date;}).length+1>=10;var nodes={};GRAPH_EDGES.forEach(function(e){nodes[e[0]]=1;nodes[e[1]]=1;});var deg=(adj[pr]||[]).length;var cent=Object.keys(nodes).length<3?0:Math.min(1,deg/Math.max(1,Object.keys(nodes).length-1))*0.3;
+  return {centrality_score:+cent.toFixed(4),referral_loop:loop,burst_detected:burst,graph_risk_score:+Math.min(100,cent*50+(loop?30:0)+(burst?20:0)).toFixed(2)};}
+function heuristicLLM(p){var f=[],r=[],s=10,procs=p.procedure_codes||[],dx=p.diagnosis_codes||[],meds=(p.medications||[]).map(function(m){return String(m).toLowerCase();});
+  if(procs.indexOf("99215")>=0&&dx.some(function(c){return /^(E11|M54|M06)/.test(c);})){f.push("UPCODING");r.push("Level-5 visit (99215) is not supported by a routine chronic-care diagnosis.");s+=45;}
+  if(procs.indexOf("44950")>=0&&!dx.some(function(c){return /^K35/.test(c);})){f.push("PHANTOM_BILLING");r.push("Appendectomy billed without an acute appendicitis diagnosis (K35) or admission record.");s+=70;}
+  if(meds.indexOf("morphine")>=0){f.push("CONTROLLED_DRUG_ABUSE");r.push("Opioid prescribing for a non-cancer back-pain diagnosis warrants dose verification against the 3000mg monthly limit.");s+=40;}
+  if(meds.indexOf("methotrexate")>=0&&meds.indexOf("ibuprofen")>=0){f.push("CONTRAINDICATION");r.push("Methotrexate with an NSAID raises toxicity risk and needs CBC monitoring.");s+=35;}
+  if(meds.indexOf("oseltamivir")>=0){f.push("ABNORMAL_PRESCRIBING");r.push("Antiviral course should not exceed 5 days for uncomplicated influenza.");s+=25;}
+  if(dx.indexOf("K58.9")>=0&&procs.indexOf("45378")>=0){f.push("UNNECESSARY_PROCEDURE");r.push("Colonoscopy is not routinely indicated for IBS without alarm features.");s+=35;}
+  if(dx.indexOf("J45.909")>=0&&procs.length>=3){f.push("UNNECESSARY_PROCEDURE");r.push("Three respiratory procedures in one asthma visit exceed standard care.");s+=30;}
+  if(p.referral_provider_id){r.push("Referral pattern should be checked for reciprocal loops.");s+=10;}if(!r.length)r.push("Diagnosis, procedure and medication are clinically consistent.");s=Math.min(95,s);
+  return {extracted:{},checks:{},fraud_flags:f,llm_risk_score:s,overall_risk:s>=70?"high":s>=40?"medium":"low",rationale:r};}
+var AGENTS=[["IngestorAgent","validate, assign case id"],["OCRExtractorAgent","extract text from attached documents"],["NormalizerAgent","map to ICD-10 / CPT / ATC"],["ClinicalReasonerAgent","LLM clinical review"],["RuleEngineAgent","CHI-001 to CHI-010"],["GraphAnalyticsAgent","centrality, referral loops, burst"],["FraudScorerAgent","0.40 LLM + 0.35 rules + 0.25 graph"],["CaseManagerAgent","evidence pack and escalation"],["AuditAgent","write audit trail"]];
+var selCase=2;
+function viewAnalyze(v){var w=el("div");
+  w.innerHTML=pageHead("Analyze a Claim","Run one claim through all nine agents. The library is the backend’s own ten test cases; the LLM stage uses the backend’s reasoner prompt and schema, and rules, graph and scoring are ported line for line.")+
+    '<div class="grid two" style="grid-template-columns:1fr 1fr">'+panel("Test case library","routers/test_cases.py",'<div class="pb"><div class="cases" id="cases">'+TEST_CASES.map(function(t){return '<button class="case '+(t.id===selCase?"on":"")+'" data-id="'+t.id+'"><b>'+esc_(t.name)+'</b><span>'+esc_(t.fraud_type)+' · '+esc_(t.disease)+'</span></button>';}).join("")+'</div><div class="callout info mt" id="tcDesc"></div><div class="mt"><label class="small muted" style="display:block;margin-bottom:5px">Claim payload (JSON)</label><textarea class="code" id="payload" spellcheck="false"></textarea></div><div class="mt" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn primary" id="runBtn">'+ic("play")+'Run fraud analysis</button><span class="muted small">Run Duplicate Claim twice to trigger CHI-003.</span></div></div>')+
+    '<div id="resultPane">'+panel("Pipeline","",'<div class="empty">Pick a scenario and run the pipeline. Each agent reports as it executes, followed by the score breakdown, LLM rationale, rule violations, graph result and evidence summary.</div>')+'</div></div>';
+  v.appendChild(w);
+  function load(t){selCase=t.id;$("#payload").value=JSON.stringify(t.payload,null,2);$("#tcDesc").innerHTML='<b>'+esc_(t.name)+'</b> — '+esc_(t.description);w.querySelectorAll(".case").forEach(function(c){c.classList.toggle("on",+c.dataset.id===t.id);});}
+  load(TEST_CASES.find(function(t){return t.id===selCase;}));w.querySelectorAll(".case").forEach(function(c){c.addEventListener("click",function(){load(TEST_CASES.find(function(t){return String(t.id)===c.dataset.id;}));});});
+  $("#runBtn").addEventListener("click",runPipeline);}
+async function runPipeline(){var pane=$("#resultPane"),raw=$("#payload").value,p;try{p=JSON.parse(raw);}catch(e){pane.innerHTML=panel("Pipeline","",'<div class="pb" style="color:var(--crit)">Invalid JSON: '+esc_(e.message)+'</div>');return;}
+  $("#runBtn").disabled=true;
+  pane.innerHTML=panel("Pipeline",esc_(p.provider_id||"")+" · "+esc_(p.patient_id||""),'<div class="pb"><div class="steps">'+AGENTS.map(function(a,i){return '<div class="step" data-i="'+i+'"><span class="dot">'+(i+1)+'</span><div><div class="nm">'+a[0]+'</div><div class="ds" id="ss'+i+'">'+a[1]+'</div></div><span class="stt" id="st'+i+'">queued</span></div>';}).join("")+'</div></div>')+'<div id="result"></div>';
+  function setS(i,state,txt,sub){var s=pane.querySelector('.step[data-i="'+i+'"]');s.className="step "+state;$("#st"+i).innerHTML=state==="run"?'<span class="spin"></span>':txt;if(sub)$("#ss"+i).textContent=sub;}
+  function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}var caseId="case-"+Math.random().toString(16).slice(2,10);
+  setS(0,"run");await wait(260);setS(0,"done","done","Case "+caseId+" created");setS(1,"run");await wait(220);setS(1,p.document_base64?"done":"skip",p.document_base64?"done":"skipped","no document attached");
+  setS(2,"run");await wait(260);setS(2,"done","done",((p.diagnosis_codes||[]).length+(p.procedure_codes||[]).length)+" codes normalized");
+  setS(3,"run","","calling reasoner…");var llm,src;var rr=await runReasoner(p,function(o){$("#ss3").textContent="streaming… "+(o.text||"").length+" chars";});if(rr.ok){llm=rr.result;src="live";}else{llm=heuristicLLM(p);src="fallback";}setS(3,"done","done",(src==="live"?"LLM":"offline heuristic")+" risk "+llm.llm_risk_score+" ("+llm.overall_risk+")");
+  setS(4,"run");await wait(300);var viols=ruleEngine(p);setS(4,"done","done",viols.length+" rule violation(s)");setS(5,"run");await wait(300);var graph=graphAgent(p);setS(5,"done","done","graph risk "+graph.graph_risk_score+(graph.referral_loop?" · referral loop":"")+(graph.burst_detected?" · burst":""));
+  setS(6,"run");await wait(260);var sc=fraudScore(llm,viols,graph);setS(6,"done","done","final "+sc.final_score+" ("+sc.risk_category+")");
+  setS(7,"run");await wait(220);var ev=(llm.rationale||[]).slice();viols.forEach(function(x){ev.push("["+x.severity+"] "+x.description+": "+x.evidence);});if(graph.referral_loop)ev.push("Graph analysis: Referral loop detected in provider network");if(graph.burst_detected)ev.push("Graph analysis: Burst billing detected (>10 claims in 24h)");if(graph.centrality_score>0.1)ev.push("Graph analysis: High provider centrality score ("+graph.centrality_score.toFixed(3)+")");setS(7,"done","done","escalate="+sc.escalate);
+  setS(8,"run");await wait(180);setS(8,"done","done","audit written");HISTORY.push(Object.assign({case_id:caseId},p));
+  var tcase=TEST_CASES.find(function(t){return JSON.stringify(t.payload)===JSON.stringify(p);});
+  var saved=saveCase(makeCase({id:caseId,name:tcase?tcase.name:"Manual claim "+(p.provider_id||""),source:tcase?"test-case":"manual",payload:p,llm:llm,llmSource:src,viols:viols,graph:graph,graphRun:true}));
+  var fc=sc.risk_category==="HIGH"?"--crit":sc.risk_category==="MEDIUM"?"--warn":"--ok";
+  $("#result").innerHTML='<div class="mt">'+panel("Result","CaseManagerAgent",'<div class="pb"><div class="row" style="align-items:center;justify-content:space-between"><div class="bigscore"><b style="color:var('+fc+')">'+sc.final_score.toFixed(0)+'</b><span>/ 100 &nbsp;'+st(sc.risk_category)+'</span></div>'+(sc.escalate?'<span class="esc">'+ic("alert-triangle")+'Escalation required</span>':'')+'</div><div class="tagset" style="margin:10px 0 14px">'+(sc.fraud_flags.map(flagTag).join("")||'<span class="muted small">no flags</span>')+'</div>'+breakdown(sc,false)+'<div class="mt" style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="chip">'+ic("folder-open")+'Saved as case '+saved.id+'</span><button class="btn sm" id="openSaved">Open case detail'+ic("chevron-right")+'</button></div></div>')+'</div>'+
+    '<div class="mt">'+panel("AI clinical analysis",(src==="live"?"ClinicalReasonerAgent (live)":"offline heuristic — AI runtime unavailable")+" · LLM "+llm.llm_risk_score,'<div class="pb"><div class="ai">'+esc_((llm.rationale||[]).map(function(x){return "• "+x;}).join("\n"))+'</div></div>')+'</div>'+
+    '<div class="mt">'+panel("Rule violations ("+viols.length+")","RuleEngineAgent",'<div class="pb">'+violList(viols)+'</div>')+'</div>'+
+    '<div class="mt">'+panel("Graph analytics","GraphAnalyticsAgent",'<div class="pb"><dl class="kv"><dt>Graph risk</dt><dd class="mono">'+graph.graph_risk_score+'</dd><dt>Centrality</dt><dd class="mono">'+graph.centrality_score+'</dd><dt>Referral loop</dt><dd>'+(graph.referral_loop?st("HIGH","Detected"):'<span class="muted">None</span>')+'</dd><dt>Burst billing</dt><dd>'+(graph.burst_detected?st("HIGH","Detected"):'<span class="muted">None</span>')+'</dd></dl></div>')+'</div>'+
+    '<div class="mt">'+panel("Evidence summary","for the investigator",'<div class="pb"><ul style="margin:0;padding-left:18px;line-height:1.6">'+ev.map(function(e){return '<li>'+esc_(e)+'</li>';}).join("")+'</ul></div>')+'</div>';
+  icons();$("#runBtn").disabled=false;$("#openSaved").addEventListener("click",function(){openCase(saved.id);});}
+
+/* ======================= VIEW: assistant ======================= */
+var chatHistory=[];
+function viewAssistant(v){var w=el("div");w.innerHTML=pageHead("AI Assistant","Ask about the three Proposal #524 datasets in plain language. The assistant queries the real rows through tools and never invents ids or numbers.")+'<section class="panel" style="display:flex;flex-direction:column;min-height:480px"><div class="pb" style="display:flex;flex:1;min-height:0"><div class="chat" id="chatPage" style="width:100%"></div></div></section>';v.appendChild(w);mountChat($("#chatPage"));}
+function mountChat(host){host.innerHTML='<div class="msgs" id="msgs"></div><div class="sugg" id="suggest"></div><div class="askrow"><textarea id="ask" rows="1" placeholder="e.g. Which providers are billing on a non-active licence?"></textarea><button class="btn primary" id="sendBtn">'+ic("send")+'</button></div>';
+  var sugg=["Which providers are billing on a non-active licence?","List inpatient claims over SAR 10,000","Which members have more than 150 visits?","Why can nothing in this extract escalate?","What data would unlock duplicate-billing detection?"];
+  $("#suggest").innerHTML=sugg.map(function(s){return '<button>'+esc_(s)+'</button>';}).join("");$("#suggest").querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){$("#ask").value=b.textContent;sendChat();});});
+  var ta=$("#ask");ta.addEventListener("input",function(){ta.style.height="auto";ta.style.height=Math.min(120,ta.scrollHeight)+"px";});ta.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}});$("#sendBtn").addEventListener("click",sendChat);renderMsgs();icons();}
+function renderMsgs(){var m=$("#msgs");if(!m)return;if(!chatHistory.length){m.innerHTML='<div class="msg a">I can search claims, providers and members, explain scores and rules, and draft investigation notes. Try a suggestion or ask your own question.</div>';return;}m.innerHTML=chatHistory.map(function(x){return '<div class="msg '+(x.role==="user"?"u":"a")+'">'+esc_(x.content)+'</div>';}).join("");m.scrollTop=m.scrollHeight;}
+function aiTools(){function lim(a){return a.slice(0,15);}return [
+  {name:"query_claims",description:"Search claim summaries. Returns id, date, type (O/I), status, net_amount_sar, services, score, risk, rule_hits.",inputSchema:{type:"object",properties:{min_amount:{type:"number"},max_amount:{type:"number"},type:{type:"string",enum:["O","I"]},status:{type:"string"},min_services:{type:"number"},rule_id:{type:"string"},claim_id:{type:"string"}}},
+   execute:function(i){var r=CLAIMS.filter(function(c){if(i.claim_id&&c.id!==String(i.claim_id))return false;if(i.min_amount&&c.amt<i.min_amount)return false;if(i.max_amount&&c.amt>i.max_amount)return false;if(i.type&&c.type!==i.type)return false;if(i.status&&c.status!==i.status)return false;if(i.min_services&&c.sv<i.min_services)return false;if(i.rule_id&&!c.viol.some(function(v){return v.rule_id===i.rule_id;}))return false;return true;}).sort(function(a,b){return b.sc.final_score-a.sc.final_score||b.amt-a.amt;});
+     return {count:r.length,rows:lim(r).map(function(c){return {id:c.id,date:c.date,type:c.type,status:c.status,net_amount_sar:c.amt,services:c.sv,score:c.sc.final_score,risk:c.sc.risk_category,rule_hits:c.viol.map(function(v){return v.rule_id;})};})};}},
+  {name:"query_providers",description:"Search provider profiles. Returns id, type, city, region, licence (A active/H hold/C cancelled), claim_volume, score, risk, rule_hits.",inputSchema:{type:"object",properties:{region:{type:"string"},type:{type:"string"},licence:{type:"string",enum:["A","H","C"]},non_active_only:{type:"boolean"},min_volume:{type:"number"},city:{type:"string"},provider_id:{type:"string"}}},
+   execute:function(i){var r=PROVS.filter(function(p){if(i.provider_id&&p.id!==String(i.provider_id))return false;if(i.region&&p.region.toLowerCase()!==String(i.region).toLowerCase())return false;if(i.type&&p.type.toLowerCase().indexOf(String(i.type).toLowerCase())<0)return false;if(i.licence&&p.lic!==i.licence)return false;if(i.non_active_only&&p.lic==="A")return false;if(i.min_volume&&p.vol<i.min_volume)return false;if(i.city&&p.city.toLowerCase().indexOf(String(i.city).toLowerCase())<0)return false;return true;}).sort(function(a,b){return b.sc.final_score-a.sc.final_score||b.vol-a.vol;});
+     return {count:r.length,rows:lim(r).map(function(p){return {id:p.id,type:p.type,city:p.city,region:p.region,licence:p.lic,claim_volume:p.vol,score:p.sc.final_score,risk:p.sc.risk_category,rule_hits:p.viol.map(function(v){return v.rule_id;})};})};}},
+  {name:"query_members",description:"Search member profiles. Returns id, gender, age_group, city, region, policy, conditions, visits, score, risk, rule_hits.",inputSchema:{type:"object",properties:{min_visits:{type:"number"},region:{type:"string"},age_group:{type:"string"},policy:{type:"string"},condition:{type:"string",enum:["chronic","diabetes","hypertension","dyslipidemia","thyroid","cad"]},member_id:{type:"string"}}},
+   execute:function(i){var key={chronic:"chronic",diabetes:"dm",hypertension:"htn",dyslipidemia:"dys",thyroid:"thy",cad:"cad"}[i.condition];var r=MEMS.filter(function(m){if(i.member_id&&m.id!==String(i.member_id))return false;if(i.min_visits&&m.visits<i.min_visits)return false;if(i.region&&m.region.toLowerCase()!==String(i.region).toLowerCase())return false;if(i.age_group&&m.age!==i.age_group)return false;if(i.policy&&m.policy.toLowerCase().indexOf(String(i.policy).toLowerCase())<0)return false;if(key&&!m[key])return false;return true;}).sort(function(a,b){return b.sc.final_score-a.sc.final_score||b.visits-a.visits;});
+     return {count:r.length,rows:lim(r).map(function(m){var c=[];if(m.dm)c.push("diabetes");if(m.htn)c.push("hypertension");if(m.dys)c.push("dyslipidemia");if(m.thy)c.push("thyroid");if(m.cad)c.push("cad");return {id:m.id,gender:m.g,age_group:m.age,city:m.city,region:m.region,policy:m.policy,conditions:c,visits:m.visits,score:m.sc.final_score,risk:m.sc.risk_category,rule_hits:m.viol.map(function(v){return v.rule_id;})};})};}},
+  {name:"portfolio_stats",description:"Aggregate statistics for all three datasets plus the scoring formula, rule thresholds and known dataset limitations.",inputSchema:{type:"object",properties:{}},
+   execute:function(){var s=stats();return {claims:s.claims,providers:{n:s.prov.n,non_active_licence:s.prov.nonActive,extreme_volume:s.prov.extreme,elevated_volume:s.prov.elevated,flagged:s.prov.flagged,by_region:s.prov.byRegion,by_type:s.prov.byType},members:{n:s.mem.n,very_high_visits:s.mem.veryHigh,elevated_visits:s.mem.elevated,chronic:s.mem.chronic,flagged:s.mem.flagged,by_region:s.mem.byRegion,by_age:s.mem.byAge,by_policy:s.mem.byPolicy,conditions:s.mem.cond},rule_hits:s.ruleHits,
+     scoring:"final = 0.40*LLM + 0.35*rule + 0.25*graph; HIGH>=70, MEDIUM>=40; a HIGH rule lifts LOW to MEDIUM; escalate only when HIGH. Rule score = max severity (HIGH 100, MEDIUM 60, LOW 30).",
+     limitations:["Bulk CSV import skips the LLM and graph stages (run_llm/run_graph default false), so the maximum bulk score is 35 (MEDIUM) and nothing can escalate.","Claims carry no provider or member id, so the three files cannot be joined; duplicate billing (CHI-003), doctor shopping (CHI-010), burst billing and referral loops cannot be evaluated.","Claims carry no diagnosis, procedure or medication codes, so disease-specific rules CHI-005 to CHI-009 and most LLM checks have little to work with."],
+     thresholds:{claim_high_amount:5000,claim_medium_amount:2500,claim_services:10,provider_extreme_volume:100000,provider_elevated_volume:50000,member_very_high_visits:100,member_elevated_visits:50}};}}];}
+async function sendChat(){var ta=$("#ask");if(!ta)return;var q=ta.value.trim();if(!q)return;ta.value="";ta.style.height="auto";chatHistory.push({role:"user",content:q});renderMsgs();
+  var sm=await getSample();if(!sm){chatHistory.push({role:"assistant",content:"The AI runtime isn’t available in this view. Open the artifact in claude.ai with AI features enabled and ask again. The Claims, Providers and Members pages have full filtering in the meantime."});renderMsgs();return;}
+  var ph={role:"assistant",content:"Thinking…"};chatHistory.push(ph);renderMsgs();
+  var msgs=[{role:"user",content:"You are Fraudspect's assistant for Tawuniya healthcare-fraud investigators, working on the anonymized 'Data For Proposal #524' extract (1,000 claim summaries, 989 provider profiles, 1,016 member profiles). Always use the tools to get real rows and numbers; never invent ids or figures. Amounts are SAR. Be concise and plain; when listing rows give id, the key fields, and why they matter. If asked why nothing escalates or what data is missing, use portfolio_stats.limitations. If asked to draft a note, write a short formal SIU note.\n\nQuestion: "+q}];
+  try{var r=await sm(msgs,{modelTier:"default",tools:aiTools(),onText:function(o){ph.content=o.text||"Thinking…";renderMsgs();}});ph.content=(r&&r.text)||ph.content;renderMsgs();}catch(e){ph.content=e&&e.code==="rate_limited"?"I’m being rate limited. Try again in a moment.":"I couldn’t complete that request. "+((e&&e.message)||"");renderMsgs();}}
+
+/* ======================= shell ======================= */
+function openDrawer(){$("#drawer").classList.add("show");$("#drawer").setAttribute("aria-hidden","false");$("#scrim").classList.add("show");}
+function closeDrawer(){$("#drawer").classList.remove("show");$("#drawer").setAttribute("aria-hidden","true");$("#scrim").classList.remove("show");}
+function closeRail(){$("#rail").classList.remove("show");if(!$("#drawer").classList.contains("show"))$("#scrim").classList.remove("show");}
+$("#menuBtn").addEventListener("click",function(){var r=$("#rail");r.classList.toggle("show");$("#scrim").classList.toggle("show",r.classList.contains("show"));});
+$("#scrim").addEventListener("click",function(){closeDrawer();closeRail();});$("#drawerClose").addEventListener("click",closeDrawer);
+$("#askBtn").addEventListener("click",function(){$("#drawerTitle").textContent="AI Assistant";$("#dtabs").hidden=true;$("#drawerBody").innerHTML='<div class="chat" id="chatDrawer" style="min-height:70vh"></div>';mountChat($("#chatDrawer"));openDrawer();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeDrawer();closeRail();}if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="TEXTAREA"){e.preventDefault();var g=$("#gq");if(g)g.focus();}});
+document.querySelectorAll("#rail a").forEach(function(a){a.addEventListener("click",function(){go(a.dataset.route);});});
+$("#gq").addEventListener("keydown",function(e){if(e.key!=="Enter")return;var q=this.value.trim();if(!q)return;this.value="";if(CLAIMS.some(function(c){return c.id===q;})){fC.q=q;go("claims");setTimeout(function(){openClaim(q);},50);}else if(PROVS.some(function(p){return p.id===q;})){fP.q=q;go("providers");setTimeout(function(){openProvider(q);},50);}else if(MEMS.some(function(m){return m.id===q;})){fM.q=q;go("members");setTimeout(function(){openMember(q);},50);}else{fC.q=q;go("claims");if(current()==="claims")render();}});
+function applyTheme(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem("fs-theme",t);}catch(e){}var i=$("#themeIco");if(i){i.setAttribute("data-lucide",t==="dark"?"moon":"sun");}icons();if($("#view").children.length)render();}
+(function(){var t;try{t=localStorage.getItem("fs-theme");}catch(e){}if(!t)t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t);var i=$("#themeIco");if(i)i.setAttribute("data-lucide",t==="dark"?"moon":"sun");})();
+$("#themeBtn").addEventListener("click",function(){applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");});
+$("#nClaims").textContent=sar(CLAIMS.length);$("#nProv").textContent=sar(PROVS.length);$("#nMem").textContent=sar(MEMS.length);
+loadCases();seedCases();persistCases();
+render();icons();
+</script>
+
+</body></html>

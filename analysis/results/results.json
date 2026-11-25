@@ -1,0 +1,547 @@
+{
+ "claims": {
+  "n": 1000,
+  "total": 1070763.58,
+  "median": 336.165,
+  "mean": 1070.76358,
+  "p90": 2051.6910000000007,
+  "p99": 9288.476499999992,
+  "max": 100285.17,
+  "min": 0.0,
+  "sv_mean": 5.798,
+  "sv_var": 55.813009009009015,
+  "sv_median": 4.0,
+  "sv_max": 147,
+  "inpatient": 24,
+  "status": {
+   "N": 989,
+   "J": 11
+  },
+  "date_min": "2024-12-17",
+  "date_max": "2025-01-20",
+  "days": 34,
+  "ip_median": 8675.305,
+  "op_median": 319.295,
+  "ip_share_value": 0.34590588148319346,
+  "top10_value_share": 0.5960994115993374,
+  "spearman_amt_sv": 0.5719183490692312,
+  "daily_max": 46,
+  "daily_max_date": "2025-01-02",
+  "daily_median": 30.0
+ },
+ "providers": {
+  "n": 989,
+  "lic": {
+   "A": 967,
+   "H": 21,
+   "C": 1
+  },
+  "vol_median": 7033.0,
+  "vol_mean": 25867.364004044488,
+  "vol_q1": 2295.0,
+  "vol_q3": 23956.0,
+  "vol_max": 1271235,
+  "vol_min": 1,
+  "types": {
+   "Polyclinic": 512,
+   "Hospital": 233,
+   "Dental Center": 119,
+   "Optical Shop": 52,
+   "Eye Center": 13,
+   "Physical Therapist Center": 12,
+   "EYE, ENT & DENTAL": 7,
+   "One Day Surgery Center": 7,
+   "Cardiac Center": 6,
+   "Pharmacy": 5,
+   "Autism": 5,
+   "Home Care": 4,
+   "Hearing Aid Center": 4,
+   "Radiology Center": 4,
+   "E.N.T Center": 3,
+   "Cancer Center": 1,
+   "Rehabilitation Center": 1,
+   "Labaratoty": 1
+  },
+  "regions": {
+   "Center": 438,
+   "West": 217,
+   "East": 196,
+   "South": 99,
+   "North": 39
+  },
+  "top1pct_vol_share": 0.2371776562735082,
+  "top10pct_vol_share": 0.6081709590845389,
+  "vol_by_type_median": {
+   "Autism": 1173.0,
+   "Cancer Center": 3740.0,
+   "Cardiac Center": 978.5,
+   "Dental Center": 2694.0,
+   "E.N.T Center": 7417.0,
+   "EYE, ENT & DENTAL": 9462.0,
+   "Eye Center": 4081.0,
+   "Hearing Aid Center": 1539.5,
+   "Home Care": 1592.0,
+   "Hospital": 12144.0,
+   "Labaratoty": 1005.0,
+   "One Day Surgery Center": 2625.0,
+   "Optical Shop": 3330.0,
+   "Pharmacy": 46776.0,
+   "Physical Therapist Center": 752.5,
+   "Polyclinic": 10280.5,
+   "Radiology Center": 421.5,
+   "Rehabilitation Center": 5810.0
+  },
+  "by_type": {
+   "Autism": {
+    "n": 5,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Cancer Center": {
+    "n": 1,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Cardiac Center": {
+    "n": 6,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Dental Center": {
+    "n": 119,
+    "flagged": 1,
+    "nonactive": 1,
+    "extreme": 0
+   },
+   "E.N.T Center": {
+    "n": 3,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "EYE, ENT & DENTAL": {
+    "n": 7,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Eye Center": {
+    "n": 13,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Hearing Aid Center": {
+    "n": 4,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Home Care": {
+    "n": 4,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Hospital": {
+    "n": 233,
+    "flagged": 69,
+    "nonactive": 7,
+    "extreme": 31
+   },
+   "Labaratoty": {
+    "n": 1,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "One Day Surgery Center": {
+    "n": 7,
+    "flagged": 1,
+    "nonactive": 1,
+    "extreme": 0
+   },
+   "Optical Shop": {
+    "n": 52,
+    "flagged": 2,
+    "nonactive": 0,
+    "extreme": 1
+   },
+   "Pharmacy": {
+    "n": 5,
+    "flagged": 2,
+    "nonactive": 0,
+    "extreme": 2
+   },
+   "Physical Therapist Center": {
+    "n": 12,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Polyclinic": {
+    "n": 512,
+    "flagged": 62,
+    "nonactive": 13,
+    "extreme": 12
+   },
+   "Radiology Center": {
+    "n": 4,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   },
+   "Rehabilitation Center": {
+    "n": 1,
+    "flagged": 0,
+    "nonactive": 0,
+    "extreme": 0
+   }
+  },
+  "extreme_hospitals": 31,
+  "chi2_hosp_extreme_p": 2.6288450484783363e-12
+ },
+ "members": {
+  "rows": 1016,
+  "distinct": 1000,
+  "dup_ids": 16,
+  "visits_median": 20.5,
+  "visits_mean": 32.23425196850393,
+  "visits_max": 444,
+  "zero_visits": 90,
+  "chronic": 541,
+  "conds": {
+   "diabetes": 236,
+   "hypertension": 218,
+   "dyslipidemia": 310,
+   "thyroid": 84,
+   "cad": 38
+  },
+  "age": {
+   "46-60": 427,
+   "61+": 349,
+   "31-45": 236,
+   "0-18": 2,
+   "19-30": 2
+  },
+  "sex": {
+   "M": 545,
+   "F": 471
+  },
+  "policy": {
+   "KA -": 543,
+   "GOV": 211,
+   "COPR": 167,
+   "SME": 94,
+   "Retail": 1
+  },
+  "region": {
+   "Center": 675,
+   "West": 191,
+   "UNKNOWN": 106,
+   "East": 39,
+   "South": 5
+  },
+  "age46plus": 776,
+  "visits_median_chronic": 38.0,
+  "visits_median_nonchronic": 7.0,
+  "mw_p": 2.7672736814163606e-86,
+  "mw_U": 220320.0,
+  "visits_median_by_ncond": {
+   "0": 10.0,
+   "1": 29.0,
+   "2": 36.0,
+   "3": 50.0,
+   "4": 58.0
+  },
+  "n_by_ncond": {
+   "0": 581,
+   "1": 167,
+   "2": 129,
+   "3": 96,
+   "4": 43
+  },
+  "spearman_ncond_visits": 0.5506174286540525,
+  "spearman_ncond_visits_p": 1.3160617754481248e-81,
+  "visits_median_by_age": {
+   "0-18": 0.0,
+   "19-30": 0.0,
+   "31-45": 18.0,
+   "46-60": 18.0,
+   "61+": 26.0
+  },
+  "veryhigh_chronic": 42,
+  "veryhigh_n": 44,
+  "elev_or_more_chronic": 197,
+  "elev_or_more_n": 227,
+  "flag_rate_chronic": 0.36414048059149723,
+  "flag_rate_nonchronic": 0.06315789473684211,
+  "chi2_chronic_flag_p": 3.4720433514363866e-30,
+  "flag_rate_by_policy": {
+   "COPR": 0.20359281437125748,
+   "GOV": 0.15165876777251186,
+   "KA -": 0.2559852670349908,
+   "Retail": 0.0,
+   "SME": 0.23404255319148937
+  }
+ },
+ "bulk": {
+  "hits": {
+   "CSV-CLAIM-001": 30,
+   "CSV-CLAIM-002": 44,
+   "CSV-CLAIM-003": 140,
+   "CSV-CLAIM-004": 11,
+   "CSV-MEMBER-001": 44,
+   "CSV-MEMBER-002": 183,
+   "CSV-PROVIDER-001": 22,
+   "CSV-PROVIDER-002": 46,
+   "CSV-PROVIDER-003": 70
+  },
+  "flagged": {
+   "claims": 176,
+   "providers": 137,
+   "members": 227
+  },
+  "categories": {
+   "claims": {
+    "LOW": 970,
+    "MEDIUM": 30
+   },
+   "providers": {
+    "LOW": 922,
+    "MEDIUM": 67
+   },
+   "members": {
+    "LOW": 972,
+    "MEDIUM": 44
+   }
+  },
+  "scores": {
+   "claims": {
+    "0.0": 824,
+    "10.5": 10,
+    "21.0": 136,
+    "35.0": 30
+   },
+   "providers": {
+    "0.0": 852,
+    "21.0": 70,
+    "35.0": 67
+   },
+   "members": {
+    "0.0": 789,
+    "21.0": 183,
+    "35.0": 44
+   }
+  },
+  "escalated": 0,
+  "flagged_claim_value": 711380.64,
+  "claims_multi_rule": 48,
+  "amount_and_services": 48
+ },
+ "thresholds": {
+  "amt5000_pct": 97.0,
+  "amt2500_pct": 92.60000000000001,
+  "sv10_pct": 86.0,
+  "vis100_pct": 95.66929133858268,
+  "vis50_pct": 77.65748031496064,
+  "vol100k_pct": 95.34883720930232,
+  "vol50k_pct": 88.27098078867543
+ },
+ "ceilings": {
+  "rules": 35.0,
+  "rules+graph": 60.0,
+  "llm": 40.0,
+  "llm+graph": 65.0,
+  "llm+rules": 75.0,
+  "all": 100
+ },
+ "min_llm_for_high_all_max": 25.0,
+ "min_llm_for_high_rules_only": 87.5,
+ "test_cases": [
+  {
+   "name": "Diabetes upcoding",
+   "rules": [
+    "CHI-005"
+   ],
+   "centrality": 0.075,
+   "loop": false,
+   "burst": false,
+   "graph": 3.75,
+   "score_no_llm": 11.44,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 146.4
+  },
+  {
+   "name": "Phantom appendectomy",
+   "rules": [],
+   "centrality": 0.05,
+   "loop": false,
+   "burst": false,
+   "graph": 2.5,
+   "score_no_llm": 0.62,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 173.4
+  },
+  {
+   "name": "Duplicate claim",
+   "rules": [],
+   "centrality": 0.0375,
+   "loop": false,
+   "burst": false,
+   "graph": 1.88,
+   "score_no_llm": 0.47,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 173.8
+  },
+  {
+   "name": "Doctor shopping",
+   "rules": [],
+   "centrality": 0.03,
+   "loop": false,
+   "burst": false,
+   "graph": 1.5,
+   "score_no_llm": 0.38,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 174.1
+  },
+  {
+   "name": "Asthma bronchodilator burst",
+   "rules": [
+    "CHI-006"
+   ],
+   "centrality": 0.025,
+   "loop": false,
+   "burst": false,
+   "graph": 1.25,
+   "score_no_llm": 21.31,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 121.7
+  },
+  {
+   "name": "Influenza extended antiviral",
+   "rules": [],
+   "centrality": 0.0214,
+   "loop": false,
+   "burst": false,
+   "graph": 1.07,
+   "score_no_llm": 0.27,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 174.3
+  },
+  {
+   "name": "RA contraindicated combination",
+   "rules": [
+    "CHI-007"
+   ],
+   "centrality": 0.0187,
+   "loop": false,
+   "burst": false,
+   "graph": 0.94,
+   "score_no_llm": 21.23,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 121.9
+  },
+  {
+   "name": "IBS repeat colonoscopy",
+   "rules": [],
+   "centrality": 0.0167,
+   "loop": false,
+   "burst": false,
+   "graph": 0.83,
+   "score_no_llm": 0.21,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 174.5
+  },
+  {
+   "name": "Opioid over-prescribing",
+   "rules": [],
+   "centrality": 0.015,
+   "loop": false,
+   "burst": false,
+   "graph": 0.75,
+   "score_no_llm": 0.19,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 174.5
+  },
+  {
+   "name": "Provider referral loop",
+   "rules": [],
+   "centrality": 0.015,
+   "loop": true,
+   "burst": false,
+   "graph": 30.75,
+   "score_no_llm": 7.69,
+   "cat_no_llm": "LOW",
+   "llm_needed_for_high": 155.8
+  },
+  {
+   "name": "Duplicate claim (second submission)",
+   "rules": [
+    "CHI-003"
+   ],
+   "centrality": 0.03,
+   "loop": false,
+   "burst": false,
+   "graph": 1.5,
+   "score_no_llm": 35.38,
+   "cat_no_llm": "MEDIUM",
+   "llm_needed_for_high": 86.6
+  }
+ ],
+ "readiness": [
+  [
+   "CSV-CLAIM-001 to 004",
+   "amount, services, status",
+   true
+  ],
+  [
+   "CSV-PROVIDER-001 to 003",
+   "licence, volume",
+   true
+  ],
+  [
+   "CSV-MEMBER-001/002",
+   "visit count",
+   true
+  ],
+  [
+   "CHI-001 prohibited CPT pairs",
+   "procedure codes",
+   false
+  ],
+  [
+   "CHI-002 paediatric CPT",
+   "procedure codes, age",
+   false
+  ],
+  [
+   "CHI-003 duplicate billing",
+   "member id, provider id, codes, dates",
+   false
+  ],
+  [
+   "CHI-005 to CHI-008",
+   "diagnosis, procedure, medication codes",
+   false
+  ],
+  [
+   "CHI-010 doctor shopping",
+   "member id, provider id, dates",
+   false
+  ],
+  [
+   "Graph: loops, bursts, centrality",
+   "provider id, member id, referrals",
+   false
+  ],
+  [
+   "LLM clinical review",
+   "diagnoses, procedures, medications",
+   false
+  ]
+ ]
+}
